@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Barcode Monitor",
+  "version": "1.0",
+  "description": "Отслеживает отсканированные номера и отправляет их на сервер",
+  "permissions": [
+    "scripting",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "http://localhost:3000/",
+    "http://localhost:4000/"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://*.ozon.ru/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
