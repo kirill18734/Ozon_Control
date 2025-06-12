@@ -1,10 +1,7 @@
 from flask import Flask, request
 from flask_cors import CORS
 import win32print
-import socket
 import psutil
-import os
-import signal
 import time
 
 PORT = 4025

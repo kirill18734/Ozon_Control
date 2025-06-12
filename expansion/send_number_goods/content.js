@@ -1,5 +1,8 @@
-const scannedMap = new Map(); // вместо Set, чтобы хранить время последней отправки
-const RESEND_INTERVAL_MS = 3000; // повторная отправка через 3 секунды
+const scannedSet = new Set(); // сохраняем только уникальные значения
+
+function isValidCode(code) {
+    return /^\d{3,}-\d+$/.test(code); // Пример: 422-4352
+}
 
 function sendToServer(text) {
     fetch("http://127.0.0.1:4025/print", {
@@ -8,26 +11,31 @@ function sendToServer(text) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({ text })
-    }).then(res => res.json())
-      .then(data => console.log("📤 Отправлено на сервер:", data))
-      .catch(err => console.error("❌ Ошибка:", err));
+    })
+    .then(res => res.json())
+    .then(data => console.log("📤 Отправлено на сервер:", data))
+    .catch(err => console.error("❌ Ошибка:", err));
 }
 
 const observer = new MutationObserver((mutationsList) => {
-    const now = Date.now();
-
     for (const mutation of mutationsList) {
         const newItems = mutation.target.querySelectorAll('[data-testid="logItemPlace"]');
         for (const item of newItems) {
             const code = item.textContent.trim();
 
-            const lastSent = scannedMap.get(code);
-            if (!lastSent || (now - lastSent > RESEND_INTERVAL_MS)) {
-                scannedMap.set(code, now);
-                console.log(lastSent ? "🔁 Повторно отправлено:" : "📦 Новый номер:", code);
-				
-                sendToServer(code);
+            if (!isValidCode(code)) {
+                console.warn("⛔ Некорректный формат:", code);
+                continue;
             }
+
+            if (scannedSet.has(code)) {
+                console.log("🔁 Уже отправлено ранее:", code);
+                continue;
+            }
+
+            scannedSet.add(code);
+            console.log("📦 Новый номер:", code);
+            sendToServer(code);
         }
     }
 });
