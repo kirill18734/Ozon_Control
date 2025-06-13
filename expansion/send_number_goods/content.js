@@ -1,7 +1,7 @@
 const scannedSet = new Set(); // сохраняем только уникальные значения
 
 function isValidCode(code) {
-    return /^\d{3,}-\d+$/.test(code); // Пример: 422-4352
+    return /^\d{1,}-\d+$/.test(code); // Пример: 422-4352
 }
 
 function sendToServer(text) {
@@ -28,7 +28,7 @@ const observer = new MutationObserver((mutationsList) => {
                 continue;
             }
 
-            if (scannedSet.has(code)) {
+                if (scannedSet.has(code)) {
                 console.log("🔁 Уже отправлено ранее:", code);
                 continue;
             }

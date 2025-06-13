@@ -3,9 +3,10 @@ from flask_cors import CORS
 import win32print
 import psutil
 import time
+import win32ui
 
 PORT = 4025
-PRINTER_NAME = win32print.GetDefaultPrinter()
+PRINTER_NAME = "CHITENG-CT221B"
 
 def free_port(port):
     """Завершить процесс, использующий указанный порт."""
@@ -33,24 +34,53 @@ time.sleep(1)
 app = Flask(__name__)
 CORS(app)
 
+def print_text(text):
+    # Открываем указанный принтер
+    printer = win32print.OpenPrinter(PRINTER_NAME)
+    try:
+        # Получаем информацию о принтере
+        printer_info = win32print.GetPrinter(printer, 2)
+        # Создаем DC (device context) для печати
+        hdc = win32ui.CreateDC()
+        hdc.CreatePrinterDC(PRINTER_NAME)
+
+        # Начинаем документ
+        hdc.StartDoc("Печать текста через Python")
+        hdc.StartPage()
+
+        # Устанавливаем шрифт (по желанию можно поменять)
+        font = win32ui.CreateFont({
+            "name": "Consolas",
+            "height": 20,
+            "weight": 400,
+        })
+        hdc.SelectObject(font)
+
+        # Печатаем текст
+        hdc.TextOut(100, 100, text)
+
+        # Завершаем страницу и документ
+        hdc.EndPage()
+        hdc.EndDoc()
+        hdc.DeleteDC()
+    finally:
+        # Закрываем принтер
+        win32print.ClosePrinter(printer)
+
 @app.route('/print', methods=['POST'])
 def print_from_data():
     try:
         data = request.get_json()
         print("📥 Пришли данные:", data)
         text = data.get('text', '').strip()
+
         print("📝 Текст для печати:", text)
 
         if not text:
             return {'status': 'error', 'message': 'Empty text'}, 400
-
-        hPrinter = win32print.OpenPrinter(PRINTER_NAME)
-        hJob = win32print.StartDocPrinter(hPrinter, 1, ("PrintJob", None, "RAW"))
-        win32print.StartPagePrinter(hPrinter)
-        win32print.WritePrinter(hPrinter, text.encode('utf-8'))
-        win32print.EndPagePrinter(hPrinter)
-        win32print.EndDocPrinter(hPrinter)
-        win32print.ClosePrinter(hPrinter)
+            ## тут нужные права на использование принтеров
+        print(f'Отправил на распечатку: \'{str(text).split("-")[0]}.\' ')
+        print_text(f"{str(text).split('-')[0]}.") # разбил строку по знаку тире, и получичил только первое значение в номере
 
         print(f"✅ Напечатано: {text}")
         return {'status': 'success', 'message': f'Printed: {text}'}
