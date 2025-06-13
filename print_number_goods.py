@@ -34,12 +34,19 @@ time.sleep(1)
 app = Flask(__name__)
 CORS(app)
 
+import win32print
+import win32ui
+
+PRINTER_NAME = "CHITENG-CT221B"
+
+
 def print_text(text):
     # Открываем указанный принтер
     printer = win32print.OpenPrinter(PRINTER_NAME)
     try:
         # Получаем информацию о принтере
         printer_info = win32print.GetPrinter(printer, 2)
+
         # Создаем DC (device context) для печати
         hdc = win32ui.CreateDC()
         hdc.CreatePrinterDC(PRINTER_NAME)
@@ -48,24 +55,36 @@ def print_text(text):
         hdc.StartDoc("Печать текста через Python")
         hdc.StartPage()
 
-        # Устанавливаем шрифт (по желанию можно поменять)
+        # Устанавливаем шрифт
         font = win32ui.CreateFont({
             "name": "Consolas",
-            "height": 20,
+            "height": 100,  # размер шрифта в логических единицах
             "weight": 400,
         })
         hdc.SelectObject(font)
 
-        # Печатаем текст
-        hdc.TextOut(100, 100, text)
+        # Получаем размеры страницы
+        page_width = hdc.GetDeviceCaps(8)  # HORZRES
+        page_height = hdc.GetDeviceCaps(10)  # VERTRES
 
-        # Завершаем страницу и документ
+        # Вычисляем размер текста
+        text_width, text_height = hdc.GetTextExtent(text)
+
+        # Центрируем
+        x = (page_width - text_width) // 2
+        y = (page_height - text_height) // 2
+
+        # Печатаем текст по центру
+        hdc.TextOut(x, y, text)
+
+        # Завершаем печать
         hdc.EndPage()
         hdc.EndDoc()
         hdc.DeleteDC()
     finally:
         # Закрываем принтер
         win32print.ClosePrinter(printer)
+
 
 @app.route('/print', methods=['POST'])
 def print_from_data():
