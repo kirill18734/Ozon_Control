@@ -58,14 +58,15 @@ def print_text(text):
         # Устанавливаем шрифт
         font = win32ui.CreateFont({
             "name": "Consolas",
-            "height": 100,  # размер шрифта в логических единицах
+            "height": 150,  # размер шрифта в логических единицах
             "weight": 400,
         })
         hdc.SelectObject(font)
 
+
         # Получаем размеры страницы
-        page_width = hdc.GetDeviceCaps(8)  # HORZRES
-        page_height = hdc.GetDeviceCaps(10)  # VERTRES
+        page_width =430  # HORZRES
+        page_height = 250
 
         # Вычисляем размер текста
         text_width, text_height = hdc.GetTextExtent(text)
@@ -98,7 +99,7 @@ def print_from_data():
         if not text:
             return {'status': 'error', 'message': 'Empty text'}, 400
             ## тут нужные права на использование принтеров
-        print(f'Отправил на распечатку: \'{str(text).split("-")[0]}.\' ')
+        print(f'Отправил на распечатку: \'{str(str(text).split("-")[0]).replace(" " , "")}.\' ')
         print_text(f"{str(text).split('-')[0]}.") # разбил строку по знаку тире, и получичил только первое значение в номере
 
         print(f"✅ Напечатано: {text}")
