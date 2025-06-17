@@ -57,7 +57,7 @@ def print_text(text):
 
         # Устанавливаем шрифт
         font = win32ui.CreateFont({
-            "name": "Consolas",
+            "name": "Arial",
             "height": 150,  # размер шрифта в логических единицах
             "weight": 400,
         })

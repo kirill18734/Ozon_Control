@@ -9,8 +9,12 @@
   ],
   "host_permissions": [
     "http://localhost:3000/",
-    "http://localhost:4000/"
+    "http://localhost:4000/",
+    "http://127.0.0.1:4025/"
   ],
+  "background": {
+    "service_worker": "background.js"
+  },
   "content_scripts": [
     {
       "matches": ["*://*.ozon.ru/*"],
