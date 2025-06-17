@@ -1,11 +1,22 @@
-import pyautogui
+from time import sleep
+
 from PIL import Image
-import easyocr
-import numpy as np
+import pytesseract
+import os
 
-reader = easyocr.Reader(['ru', 'en'])
-screenshot = pyautogui.screenshot()
-result = reader.readtext(np.array(screenshot))
 
-for _, text, _ in result:
+while True:
+    # Укажи путь к tesseract.exe внутри проекта
+    pytesseract.pytesseract.tesseract_cmd = os.path.abspath('Tesseract-OCR\\tesseract.exe')
+
+    # Укажи путь к tessdata
+    os.environ['TESSDATA_PREFIX'] = os.path.abspath('Tesseract-OCR')
+
+    # Загрузи изображение
+    img = Image.open('img.png')
+
+    # Распознай текст
+    text = pytesseract.image_to_string(img)
+
     print(text)
+    sleep(0.3)

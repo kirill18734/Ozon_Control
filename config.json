@@ -1,10 +1,10 @@
 {
-  "printer": "CHITENG-CT221B",
+  "printer": "OneNote (Desktop)",
   "area": {
-    "x": 293,
-    "y": 251,
-    "width": 267,
-    "height": 157
+    "x": 78,
+    "y": 495,
+    "width": 164,
+    "height": 44
   },
   "theme": "light"
 }

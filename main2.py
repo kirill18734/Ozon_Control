@@ -5,7 +5,8 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QWidget
 from PySide6.QtPrintSupport import QPrinterInfo
 from PySide6 import QtCore, QtGui, QtWidgets
 from ui_mainwindow import Ui_MainWindow
-#pyside6-uic application.ui -o ui_mainwindow.py
+
+# pyside6-uic application.ui -o ui_mainwindow.py
 CONFIG_PATH = "config.json"
 LIGHT_STYLE = """
 /* Основной фон окна с легким градиентом */
@@ -13,6 +14,10 @@ QMainWindow {
     background-color: white;
     color: black;
     font-size: 14px;
+}
+QWidget {
+    background-color: white;
+    color:black;
 }
 
 /* Заголовки секций */
@@ -69,8 +74,6 @@ QPushButton#pushButton:hover {
 }
 """
 
-
-
 DARK_STYLE = """
 /* Основной фон окна с легким градиентом */
 QMainWindow {
@@ -126,6 +129,7 @@ QPushButton#pushButton:hover {
 }
 """
 
+
 class SnippingWidget(QtWidgets.QMainWindow):
     selection_done = QtCore.Signal(int, int, int, int)
 
@@ -176,6 +180,7 @@ class SnippingWidget(QtWidgets.QMainWindow):
         trans.setAlphaF(0)
         qp.setBrush(trans)
         qp.drawRect(r)
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -259,7 +264,7 @@ class MainWindow(QMainWindow):
     def check_config_state(self):
         config = self.load_config()
 
-        if config.get('printer', '') == '' :
+        if config.get('printer', '') == '':
 
             self.ui.label_error_printer.setText("Принтер не указан")
         else:
@@ -330,6 +335,7 @@ class MainWindow(QMainWindow):
                 json.dump(config, f, ensure_ascii=False, indent=2)
         except Exception as e:
             print(f"[Ошибка сохранения конфига]: {e}")
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

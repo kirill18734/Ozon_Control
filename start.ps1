@@ -1,1 +1,1 @@
-& "C:\Program Files\Ozon_Control\.venv\Scripts\python.exe" "C:\Program Files\Ozon_Control\print_number_goods.py"
+ "C:\Program Files\Ozon_Control\.venv\Scripts\python.exe" "C:\Program Files\Ozon_Control\print_number_goods.py"
