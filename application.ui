@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
+    <width>550</width>
     <height>300</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>500</width>
+    <width>550</width>
     <height>300</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>500</width>
+    <width>550</width>
     <height>300</height>
    </size>
   </property>
@@ -29,6 +29,12 @@
    <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>16777215</height>
+    </size>
+   </property>
    <property name="styleSheet">
     <string notr="true"/>
    </property>
@@ -37,7 +43,7 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>500</width>
+      <width>550</width>
       <height>300</height>
      </rect>
     </property>
@@ -50,9 +56,9 @@
     <widget class="QLabel" name="label_text_select_printer">
      <property name="geometry">
       <rect>
-       <x>10</x>
+       <x>20</x>
        <y>100</y>
-       <width>171</width>
+       <width>211</width>
        <height>31</height>
       </rect>
      </property>
@@ -74,9 +80,9 @@
     <widget class="QLabel" name="lable_title_printer">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>10</x>
        <y>60</y>
-       <width>400</width>
+       <width>521</width>
        <height>31</height>
       </rect>
      </property>
@@ -101,15 +107,16 @@
     <widget class="QLabel" name="label_title_window">
      <property name="geometry">
       <rect>
-       <x>50</x>
+       <x>19</x>
        <y>145</y>
-       <width>400</width>
+       <width>511</width>
        <height>41</height>
       </rect>
      </property>
      <property name="font">
       <font>
        <pointsize>14</pointsize>
+       <kerning>true</kerning>
       </font>
      </property>
      <property name="styleSheet">
@@ -125,7 +132,7 @@
     <widget class="QPushButton" name="pushButton">
      <property name="geometry">
       <rect>
-       <x>450</x>
+       <x>490</x>
        <y>10</y>
        <width>41</width>
        <height>41</height>
@@ -141,8 +148,8 @@
     <widget class="QLabel" name="label_error_show">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>30</y>
+       <x>30</x>
+       <y>40</y>
        <width>211</width>
        <height>20</height>
       </rect>
@@ -160,8 +167,8 @@
     <widget class="QLabel" name="label_error_printer">
      <property name="geometry">
       <rect>
-       <x>0</x>
-       <y>10</y>
+       <x>30</x>
+       <y>20</y>
        <width>211</width>
        <height>20</height>
       </rect>
@@ -179,7 +186,7 @@
     <widget class="QComboBox" name="select_printer">
      <property name="geometry">
       <rect>
-       <x>209</x>
+       <x>260</x>
        <y>100</y>
        <width>271</width>
        <height>31</height>
@@ -197,7 +204,7 @@
       <rect>
        <x>10</x>
        <y>190</y>
-       <width>231</width>
+       <width>241</width>
        <height>100</height>
       </rect>
      </property>
@@ -225,9 +232,9 @@
     <widget class="QPushButton" name="btn_change">
      <property name="geometry">
       <rect>
-       <x>243</x>
+       <x>260</x>
        <y>190</y>
-       <width>251</width>
+       <width>281</width>
        <height>100</height>
       </rect>
      </property>

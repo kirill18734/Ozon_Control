@@ -1,10 +1,10 @@
 {
   "printer": "CHITENG-CT221B",
   "area": {
-    "x": 326,
-    "y": 321,
-    "width": 399,
-    "height": 162
+    "x": 293,
+    "y": 251,
+    "width": 267,
+    "height": 157
   },
-  "theme": "dark"
+  "theme": "light"
 }
