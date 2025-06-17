@@ -5,7 +5,7 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QWidget
 from PySide6.QtPrintSupport import QPrinterInfo
 from PySide6 import QtCore, QtGui, QtWidgets
 from ui_mainwindow import Ui_MainWindow
-
+#pyside6-uic application.ui -o ui_mainwindow.py
 CONFIG_PATH = "config.json"
 LIGHT_STYLE = """
 /* Основной фон окна с легким градиентом */
