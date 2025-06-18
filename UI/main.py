@@ -4,10 +4,10 @@ import os
 from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QWidget
 from PySide6.QtPrintSupport import QPrinterInfo
 from PySide6 import QtCore, QtGui, QtWidgets
-from ui_mainwindow import Ui_MainWindow
+from UI.ui_mainwindow import Ui_MainWindow
 
 # pyside6-uic application.ui -o ui_mainwindow.py
-CONFIG_PATH = "config.json"
+CONFIG_PATH = "../config.json"
 LIGHT_STYLE = """
 /* Основной фон окна с легким градиентом */
 QMainWindow {
@@ -337,8 +337,12 @@ class MainWindow(QMainWindow):
             print(f"[Ошибка сохранения конфига]: {e}")
 
 
-if __name__ == "__main__":
+def run():
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
     sys.exit(app.exec())
+
+
+if __name__ == "__main__":
+    run()

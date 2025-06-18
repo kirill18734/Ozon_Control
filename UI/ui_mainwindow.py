@@ -97,15 +97,15 @@ class Ui_MainWindow(object):
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
 
-    # def retranslateUi(self, MainWindow):
-    #     MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 \u043c\u043e\u043d\u0438\u0442\u043e\u0440\u0438\u043d\u0433\u0430 \u044d\u043a\u0440\u0430\u043d\u0430 \u0438 \u043f\u0435\u0447\u0430\u0442\u0438", None))
-    #     self.label_text_select_printer.setText(QCoreApplication.translate("MainWindow", u"\u0412\u044b\u0431\u043e\u0440 \u043f\u0440\u0438\u043d\u0442\u0435\u0440\u0430", None))
-    #     self.lable_title_printer.setText(QCoreApplication.translate("MainWindow", u"\u041f\u0440\u0438\u043d\u0442\u0435\u0440", None))
-    #     self.label_title_window.setText(QCoreApplication.translate("MainWindow", u" \u041e\u0431\u043b\u0430\u0441\u0442\u044c \u044d\u043a\u0440\u0430\u043d\u0430", None))
-    #     self.pushButton.setText(QCoreApplication.translate("MainWindow", u"\ud83c\udf19 ", None))
-    #     self.label_error_show.setText(QCoreApplication.translate("MainWindow", u"\u041e\u0431\u043b\u0430\u0441\u0442\u044c \u043e\u0442\u0441\u043b\u0435\u0436\u0438\u0432\u0430\u043d\u0438\u044f \u043d\u0435 \u0434\u043e\u0431\u0430\u0432\u043b\u0435\u043d\u0430", None))
-    #     self.label_error_printer.setText(QCoreApplication.translate("MainWindow", u"\u041f\u0440\u0438\u043d\u0442\u0435\u0440 \u043d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d", None))
-    #     self.btn_show.setText(QCoreApplication.translate("MainWindow", u"\ud83d\udd0d \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u0442\u0435\u043a\u0443\u0449\u0443\u044e \u043e\u0431\u043b\u0430\u0441\u0442\u044c ", None))
-    #     self.btn_change.setText(QCoreApplication.translate("MainWindow", u"\u270f \u0418\u0437\u043c\u0435\u043d\u0438\u0442\u044c \u043e\u0431\u043b\u0430\u0441\u0442\u044c \u043e\u0442\u0441\u043b\u0435\u0436\u0438\u0432\u0430\u043d\u0438\u044f", None))
-    # # retranslateUi
+    def retranslateUi(self, MainWindow):
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 \u043c\u043e\u043d\u0438\u0442\u043e\u0440\u0438\u043d\u0433\u0430 \u044d\u043a\u0440\u0430\u043d\u0430 \u0438 \u043f\u0435\u0447\u0430\u0442\u0438", None))
+        self.label_text_select_printer.setText(QCoreApplication.translate("MainWindow", u"\u0412\u044b\u0431\u043e\u0440 \u043f\u0440\u0438\u043d\u0442\u0435\u0440\u0430", None))
+        self.lable_title_printer.setText(QCoreApplication.translate("MainWindow", u"\u041f\u0440\u0438\u043d\u0442\u0435\u0440", None))
+        self.label_title_window.setText(QCoreApplication.translate("MainWindow", u" \u041e\u0431\u043b\u0430\u0441\u0442\u044c \u044d\u043a\u0440\u0430\u043d\u0430", None))
+        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"\ud83c\udf19 ", None))
+        self.label_error_show.setText(QCoreApplication.translate("MainWindow", u"\u041e\u0431\u043b\u0430\u0441\u0442\u044c \u043e\u0442\u0441\u043b\u0435\u0436\u0438\u0432\u0430\u043d\u0438\u044f \u043d\u0435 \u0434\u043e\u0431\u0430\u0432\u043b\u0435\u043d\u0430", None))
+        self.label_error_printer.setText(QCoreApplication.translate("MainWindow", u"\u041f\u0440\u0438\u043d\u0442\u0435\u0440 \u043d\u0435 \u0443\u043a\u0430\u0437\u0430\u043d", None))
+        self.btn_show.setText(QCoreApplication.translate("MainWindow", u"\ud83d\udd0d \u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u0442\u0435\u043a\u0443\u0449\u0443\u044e \u043e\u0431\u043b\u0430\u0441\u0442\u044c ", None))
+        self.btn_change.setText(QCoreApplication.translate("MainWindow", u"\u270f \u0418\u0437\u043c\u0435\u043d\u0438\u0442\u044c \u043e\u0431\u043b\u0430\u0441\u0442\u044c \u043e\u0442\u0441\u043b\u0435\u0436\u0438\u0432\u0430\u043d\u0438\u044f", None))
+    # retranslateUi
 

@@ -1,22 +1,15 @@
-from time import sleep
+import threading
+from UI.main import run
+from ScreenToPrint.main import main
 
-from PIL import Image
-import pytesseract
-import os
+# Оборачиваем каждую функцию в поток
+thread1 = threading.Thread(target=run)
+thread2 = threading.Thread(target=main)
 
+# Запускаем оба потока
+thread1.start()
+thread2.start()
 
-while True:
-    # Укажи путь к tesseract.exe внутри проекта
-    pytesseract.pytesseract.tesseract_cmd = os.path.abspath('Tesseract-OCR\\tesseract.exe')
-
-    # Укажи путь к tessdata
-    os.environ['TESSDATA_PREFIX'] = os.path.abspath('Tesseract-OCR')
-
-    # Загрузи изображение
-    img = Image.open('img.png')
-
-    # Распознай текст
-    text = pytesseract.image_to_string(img)
-
-    print(text)
-    sleep(0.3)
+# Опционально: ждём завершения обоих потоков
+thread1.join()
+thread2.join()
