@@ -132,7 +132,7 @@ def main():
                 screenshot.save(OUTPUT_IMAGE)
             text = ImageText()
             # распечатываем
-            if text != last_text:# and re.fullmatch(pattern, text):
+            if text != last_text  and re.fullmatch(pattern, text):
                 print_text(text)
 
             sleep(INTERVAL)
@@ -140,6 +140,3 @@ def main():
     except KeyboardInterrupt:
         print("\nОстановка по Ctrl+C")
 
-
-if __name__ == "__main__":
-    main()
