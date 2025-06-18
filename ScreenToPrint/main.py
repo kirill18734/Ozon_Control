@@ -7,14 +7,23 @@ import win32ui
 from PIL import Image
 import pytesseract
 import os
+import re
 
+pattern = r'^\d+-\d+$'
 CONFIG_PATH = "../config.json"
 OUTPUT_IMAGE = "screenshot.png"
 INTERVAL = 0.3  # интервал скриншота
 CONFIG_CHECK_INTERVAL = 1.0  # интервал проверки изменения конфига
-Tesseract_DIR_PATH = "../Tesseract-OCR"
-Tesseract_FILE_PATH = f"{Tesseract_DIR_PATH}/tesseract.exe"
+# Tesseract_DIR_PATH = "../Tesseract-OCR"
+# Tesseract_FILE_PATH = f"{Tesseract_DIR_PATH}/tesseract.exe"
 
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # путь к текущему файлу main.py
+Tesseract_DIR_PATH = os.path.join(BASE_DIR, "../Tesseract-OCR")
+Tesseract_FILE_PATH = os.path.join(Tesseract_DIR_PATH, "tesseract.exe")
+
+pytesseract.pytesseract.tesseract_cmd = os.path.abspath(Tesseract_FILE_PATH)
+os.environ['TESSDATA_PREFIX'] = os.path.abspath(Tesseract_DIR_PATH)
 
 def load_area_from_config():
     with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
@@ -123,7 +132,7 @@ def main():
                 screenshot.save(OUTPUT_IMAGE)
             text = ImageText()
             # распечатываем
-            if text != last_text:
+            if text != last_text:# and re.fullmatch(pattern, text):
                 print_text(text)
 
             sleep(INTERVAL)
@@ -132,5 +141,5 @@ def main():
         print("\nОстановка по Ctrl+C")
 
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
