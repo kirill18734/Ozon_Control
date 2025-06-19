@@ -5,6 +5,8 @@ from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QWidget
 from PySide6.QtPrintSupport import QPrinterInfo
 from PySide6 import QtCore, QtGui, QtWidgets
 from UI.ui_mainwindow import Ui_MainWindow
+import threading
+from ScreenToPrint.main import main  # ваша фоновая функция
 
 # pyside6-uic application.ui -o ui_mainwindow.py
 CONFIG_PATH = "config.json"
@@ -337,12 +339,28 @@ class MainWindow(QMainWindow):
             print(f"[Ошибка сохранения конфига]: {e}")
 
 
+
 def run():
     app = QApplication(sys.argv)
     window = MainWindow()
+
+    # Создаём событие остановки
+    stop_event = threading.Event()
+
+    # Запускаем main в отдельном потоке
+    thread = threading.Thread(target=main, args=(stop_event,), daemon=True)
+    thread.start()
+
+    # Переопределяем closeEvent, чтобы установить stop_event
+    def on_close(event):
+        print("[INFO] Закрытие окна, останавливаем фон...")
+        stop_event.set()
+        thread.join()
+        event.accept()
+
+    window.closeEvent = on_close
+
     window.show()
     sys.exit(app.exec())
 
 
-if __name__ == "__main__":
-    run()

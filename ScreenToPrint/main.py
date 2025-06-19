@@ -100,7 +100,7 @@ def print_text(text):
             print('Ошибка при печати:', e)
 
 
-def main():
+def main(stop_event):
     print("Начинаю захват экрана... Нажмите Ctrl+C для остановки.")
     last_coords = None
     last_config_mtime = 0
@@ -108,7 +108,7 @@ def main():
     last_text = None
     try:
 
-        while True:
+        while not stop_event.is_set():
             now = time.time()
             # Проверяем файл config.json не чаще чем раз в CONFIG_CHECK_INTERVAL
             if now - last_config_check > CONFIG_CHECK_INTERVAL:
