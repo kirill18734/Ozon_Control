@@ -1,15 +1,12 @@
 import json
 import time
 from time import sleep
-import win32print
 import win32ui
 from PIL import Image
 import pytesseract
 import os
-from PySide6.QtWidgets import QApplication
 from PySide6.QtGui import QGuiApplication, QScreen
 
-import sys
 import re
 
 pattern = r'^\d+-\d+$'
