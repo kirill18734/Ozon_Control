@@ -6,12 +6,11 @@ from PIL import Image
 import pytesseract
 import os
 from PySide6.QtGui import QGuiApplication, QScreen
-
+from config import load_config, OUTPUT_IMAGE, CONFIG_PATH
 import re
 
 pattern = r'^\d+-\d+$'
-CONFIG_PATH = "config.json"
-OUTPUT_IMAGE = "screenshot.png"
+
 INTERVAL = 0.3  # интервал скриншота
 CONFIG_CHECK_INTERVAL = 1.0  # интервал проверки изменения конфига
 # Tesseract_DIR_PATH = "../Tesseract-OCR"
@@ -27,24 +26,13 @@ os.environ['TESSDATA_PREFIX'] = os.path.abspath(Tesseract_DIR_PATH)
 
 
 def load_area_from_config():
-    with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
-        config = json.load(f)
-        area = config.get("area", {})
-        x = area.get("x", 0)
-        y = area.get("y", 0)
-        width = area.get("width", 100)
-        height = area.get("height", 100)
-        return x, y, width, height
-
-
-def load_config():
-    if os.path.exists(CONFIG_PATH):
-        try:
-            with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-                return json.load(f)
-        except Exception as e:
-            print(f"[Ошибка чтения конфига]: {e}")
-    return {}
+    config = load_config()
+    area = config.get("area", {})
+    x = area.get("x", 0)
+    y = area.get("y", 0)
+    width = area.get("width", 0)
+    height = area.get("height", 0)
+    return x, y, width, height
 
 
 def ImageText():

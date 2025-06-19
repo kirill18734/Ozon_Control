@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>550</width>
-    <height>400</height>
+    <height>350</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>550</width>
-    <height>400</height>
+    <height>350</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>550</width>
-    <height>400</height>
+    <height>350</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -129,7 +129,7 @@
       <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="btn_change_them">
      <property name="geometry">
       <rect>
        <x>490</x>
@@ -181,22 +181,6 @@
      </property>
      <property name="alignment">
       <set>Qt::AlignmentFlag::AlignCenter</set>
-     </property>
-    </widget>
-    <widget class="QComboBox" name="select_printer">
-     <property name="geometry">
-      <rect>
-       <x>260</x>
-       <y>100</y>
-       <width>271</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>250</width>
-       <height>0</height>
-      </size>
      </property>
     </widget>
     <widget class="QPushButton" name="btn_show">
@@ -259,69 +243,55 @@
       <string>✏ Изменить область отслеживания</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_title_format_number">
+    <widget class="QPushButton" name="btn_enable">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>290</y>
-       <width>511</width>
+       <y>303</y>
+       <width>531</width>
        <height>41</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <pointsize>14</pointsize>
-       <kerning>true</kerning>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true"/>
-     </property>
      <property name="text">
-      <string>Формат поиска номера</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignCenter</set>
+      <string>Включить</string>
      </property>
     </widget>
-    <widget class="QComboBox" name="select_format_number">
+    <widget class="QPushButton" name="btn_update_list_print">
+     <property name="geometry">
+      <rect>
+       <x>500</x>
+       <y>100</y>
+       <width>31</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="toolTip">
+      <string/>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="shortcut">
+      <string/>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="select_printer">
      <property name="geometry">
       <rect>
        <x>260</x>
-       <y>330</y>
-       <width>271</width>
+       <y>100</y>
+       <width>221</width>
        <height>31</height>
       </rect>
      </property>
      <property name="minimumSize">
       <size>
-       <width>250</width>
+       <width>0</width>
        <height>0</height>
       </size>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_text_select_format_number">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>330</y>
-       <width>251</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="font">
-      <font>
-       <pointsize>14</pointsize>
-      </font>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">width:100%;</string>
-     </property>
-     <property name="text">
-      <string>Какой формат номера ищем</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
    </widget>
