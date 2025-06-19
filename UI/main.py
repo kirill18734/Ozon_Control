@@ -7,7 +7,7 @@ from PySide6 import QtCore, QtGui, QtWidgets
 from UI.ui_mainwindow import Ui_MainWindow
 
 # pyside6-uic application.ui -o ui_mainwindow.py
-CONFIG_PATH = "../config.json"
+CONFIG_PATH = "config.json"
 LIGHT_STYLE = """
 /* Основной фон окна с легким градиентом */
 QMainWindow {

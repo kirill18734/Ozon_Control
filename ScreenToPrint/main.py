@@ -1,16 +1,19 @@
 import json
 import time
-import pyautogui
 from time import sleep
 import win32print
 import win32ui
 from PIL import Image
 import pytesseract
 import os
+from PySide6.QtWidgets import QApplication
+from PySide6.QtGui import QGuiApplication, QScreen
+
+import sys
 import re
 
 pattern = r'^\d+-\d+$'
-CONFIG_PATH = "../config.json"
+CONFIG_PATH = "config.json"
 OUTPUT_IMAGE = "screenshot.png"
 INTERVAL = 0.3  # интервал скриншота
 CONFIG_CHECK_INTERVAL = 1.0  # интервал проверки изменения конфига
@@ -24,6 +27,7 @@ Tesseract_FILE_PATH = os.path.join(Tesseract_DIR_PATH, "tesseract.exe")
 
 pytesseract.pytesseract.tesseract_cmd = os.path.abspath(Tesseract_FILE_PATH)
 os.environ['TESSDATA_PREFIX'] = os.path.abspath(Tesseract_DIR_PATH)
+
 
 def load_area_from_config():
     with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
@@ -61,49 +65,39 @@ def ImageText():
 
 def print_text(text):
     if load_config()["printer"] != '' and text:
-        # Открываем указанный принтер
-        printer = win32print.OpenPrinter(load_config()["printer"])
         try:
-            # Получаем информацию о принтере
-            printer_info = win32print.GetPrinter(printer, 2)
+            # Создаем контекст принтера
+            printer_dc = win32ui.CreateDC()
+            printer_dc.CreatePrinterDC(load_config()["printer"])
 
-            # Создаем DC (device context) для печати
-            hdc = win32ui.CreateDC()
-            hdc.CreatePrinterDC(load_config()["printer"])
-
-            # Начинаем документ
-            hdc.StartDoc("Печать текста через Python")
-            hdc.StartPage()
-
-            # Устанавливаем шрифт
+            # Получаем размер printable area
+            horz_res = printer_dc.GetDeviceCaps(8)  # HORZRES
+            vert_res = printer_dc.GetDeviceCaps(10)  # VERTRES
+            # Создаем шрифт
             font = win32ui.CreateFont({
                 "name": "Arial",
-                "height": 150,  # размер шрифта в логических единицах
-                "weight": 400,
+                "height": 100,  # Размер шрифта
+                "weight": 600,
             })
-            hdc.SelectObject(font)
+            printer_dc.SelectObject(font)
 
-            # Получаем размеры страницы
-            page_width = 430  # HORZRES
-            page_height = 250
-
-            # Вычисляем размер текста
-            text_width, text_height = hdc.GetTextExtent(text)
+            # Вычисляем размеры текста
+            text_size = printer_dc.GetTextExtent(text)
+            text_width, text_height = text_size
 
             # Центрируем
-            x = (page_width - text_width) // 2
-            y = (page_height - text_height) // 2
+            x = (horz_res - text_width) // 2
+            y = (vert_res - text_height) // 2
 
-            # Печатаем текст по центру
-            hdc.TextOut(x, y, text)
-
-            # Завершаем печать
-            hdc.EndPage()
-            hdc.EndDoc()
-            hdc.DeleteDC()
-        finally:
-            # Закрываем принтер
-            win32print.ClosePrinter(printer)
+            # Печать
+            printer_dc.StartDoc("Centered Text")
+            printer_dc.StartPage()
+            printer_dc.TextOut(x, y, text)
+            printer_dc.EndPage()
+            printer_dc.EndDoc()
+            printer_dc.DeleteDC()
+        except Exception as e:
+            print('Ошибка при печати:', e)
 
 
 def main():
@@ -128,15 +122,25 @@ def main():
             # Если координаты ещё не загружены (например, первый раз)
             if last_coords is not None:
                 x, y, w, h = last_coords
-                screenshot = pyautogui.screenshot(region=(x, y, w, h))
-                screenshot.save(OUTPUT_IMAGE)
-            text = ImageText()
-            # распечатываем
-            if text != last_text  and re.fullmatch(pattern, text):
-                print_text(text)
+                # Получаем основной экран
+                screen: QScreen = QGuiApplication.primaryScreen()
 
+                # Захватываем нужную область
+                screenshot = screen.grabWindow(0, x, y, w, h)
+                # Сохраняем в файл
+                screenshot.save(OUTPUT_IMAGE, "png")
+            text = ImageText()
+
+            # распечатываем
+            print("Найденный текст", text, '\nДлина:', len(text))
+            if str(text).rstrip().lstrip() != last_text and re.fullmatch(pattern,
+                                                                         str(text).rstrip().lstrip()) and "500" in text:
+                print('распечатываю')
+                # print_text(str(text).split('-')[0])
+                print_text(str(text).rstrip().lstrip())
+                last_text = str(text).rstrip().lstrip()
+            # break
             sleep(INTERVAL)
 
     except KeyboardInterrupt:
         print("\nОстановка по Ctrl+C")
-
