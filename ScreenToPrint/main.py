@@ -72,7 +72,7 @@ def main():
     last_config_mtime = 0
     last_config_check = 0
     last_text = None
-
+    first_valid_skipped = False  # <-- флаг для пропуска первого валидного текста
     try:
         while True:
             now = time.time()
@@ -102,14 +102,20 @@ def main():
                 screenshot.save(OUTPUT_IMAGE, "png")
 
                 text = ImageText()
-                print("Найденный текст:", text, "| Длина:", len(text))
-
-                if text != last_text and re.fullmatch(pattern, text) and last_text:
-                    print("[INFO] Распечатка текста")
-                    print_text(text)
+                # print("Найденный текст:", text, "| Длина:", len(text))
+                print(text != last_text)
+                if text != last_text and re.fullmatch(pattern, text):
+                    if not first_valid_skipped:
+                        # Пропускаем первую подходящую строку
+                        print(f"[INFO] Пропущен первый валидный текст: {text}")
+                        first_valid_skipped = True
+                    else:
+                        print("[INFO] Распечатка текста")
+                        # print_text(text)
+                        print(f"{str(text).split('-')[0]}.")
                     last_text = text
 
-            sleep(0.3)  # или INTERVAL
+            sleep(INTERVAL)  # или INTERVAL
 
     except Exception as e:
         print(f"[ERROR] main() завершился с ошибкой: {e}")

@@ -126,7 +126,7 @@ class MainWindow(QMainWindow):
         if is_running:
             self.start_backend()
 
-
+        self.check_config_state()
     def start_backend(self):
         if not hasattr(self, 'backend_thread') or not self.backend_thread.is_alive():
             self.backend_thread = threading.Thread(target=main, daemon=True)
