@@ -112,7 +112,7 @@ def main():
                     else:
                         print("[INFO] Распечатка текста")
                         # print_text(text)
-                        print(f"{str(text).split('-')[0]}.")
+                        print_text(f"{str(text).split('-')[0]}.")
                     last_text = text
 
             sleep(INTERVAL)  # или INTERVAL
