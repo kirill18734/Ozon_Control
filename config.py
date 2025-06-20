@@ -50,7 +50,7 @@ QComboBox:hover {
 }
 
 /* Кнопки */
-QPushButton {
+QPushButton#btn_change, QPushButton#btn_show  {
     background-color: #4E89FF;
     color: white;
     border-radius: 8px;
@@ -58,7 +58,7 @@ QPushButton {
     font-weight: bold;
 }
 
-QPushButton:hover {
+QPushButton#btn_change:hover,QPushButton#btn_show:hover {
     background-color: #3A6FCC;
 }
 
@@ -80,6 +80,7 @@ QPushButton#btn_update_list_print{
                 color: white;
                 font-size: 25px; /* Увеличение размера символа */
                 border-radius:6px;
+                
 }
 QPushButton#btn_update_list_print:hover {
     background-color: #3A6FCC;
