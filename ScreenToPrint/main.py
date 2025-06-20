@@ -104,8 +104,9 @@ def main():
                 text = ImageText()
                 print("Найденный текст:", text, "| Длина:", len(text))
 
-                if text != last_text and re.fullmatch(pattern, text):
+                if text != last_text and re.fullmatch(pattern, text) and last_text:
                     print("[INFO] Распечатка текста")
+                    print_text(text)
                     last_text = text
 
             sleep(0.3)  # или INTERVAL

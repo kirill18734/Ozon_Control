@@ -117,7 +117,7 @@ class MainWindow(QMainWindow):
         self.ui.btn_enable.clicked.connect(lambda: self.save_change(True))
 
         self.apply_theme(load_config().get("theme", "light"))  # Применить тему из конфига
-        self.ui.btn_change_them.clicked.connect(lambda: self.save_change(load_config().get("theme", "light")))
+        self.ui.btn_change_them.clicked.connect(lambda: self.save_change('dark'  if load_config().get("theme", "light") == 'light' else 'light'))
 
         config = load_config()
         is_running = config.get("is_running", False)
@@ -182,9 +182,9 @@ class MainWindow(QMainWindow):
         if len(args) == 1 and args[0] not in ('dark', 'light') and args[0] not in (False, True):
             config["printer"] = args[0]
         if len(args) == 1 and args[0] in ('dark', 'light') and args[0] not in (False, True):
-            config["theme"] = 'dark' if args[0] == 'light' else 'light'
-            self.apply_theme(args[0])
+            config["theme"] = args[0]
 
+            self.apply_theme(args[0])
         if len(args) == 1 and args[0] in (False, True):
             config["is_running"] = not config.get("is_running", False)
             print(config["is_running"] )
@@ -288,15 +288,6 @@ class MainWindow(QMainWindow):
         painter.setBrush(QtGui.QColor(0, 255, 0, 50))
         rect = QtCore.QRect(area["x"], area["y"], area["width"], area["height"])
         painter.drawRect(rect)
-
-    # Переключение между светлой и тёмной темами
-    def toggle_theme(self):
-        config = load_config()
-        current = config.get("theme", "light")
-        new_theme = "dark" if current == "light" else "light"
-        config["theme"] = new_theme
-        save_config(config)
-        self.apply_theme(new_theme)
 
     # Применение темы (светлая или тёмная)
     def apply_theme(self, theme):
