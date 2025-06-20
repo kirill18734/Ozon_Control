@@ -1,13 +1,14 @@
 import sys
+import threading
+
 from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QWidget
 from PySide6.QtPrintSupport import QPrinterInfo
 from PySide6 import QtCore, QtGui, QtWidgets
-from UI.ui_mainwindow import Ui_MainWindow
-import threading
-from ScreenToPrint.main import main  # ваша фоновая функция
-from PySide6.QtWidgets import QInputDialog, QMessageBox, QPushButton
 
-from config import DARK_STYLE, LIGHT_STYLE, load_config
+from ScreenToPrint.main import main
+from UI.ui_mainwindow import Ui_MainWindow
+
+from config import DARK_STYLE, LIGHT_STYLE, load_config, save_config
 
 
 # pyside6-uic application.ui -o ui_mainwindow.py
@@ -76,6 +77,8 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.dot_animation_timer = QtCore.QTimer(self)
+        self.dot_animation_timer.timeout.connect(self.update_label_dots)
 
         # Установка начальных текстов и заголовков
         # Заголовок приложения
@@ -85,121 +88,141 @@ class MainWindow(QMainWindow):
         self.ui.lable_title_printer.setText("Принтер")
         self.ui.label_text_select_printer.setText("Выбор принтера")
         self.ui.btn_update_list_print.setText("↻")
+        self.ui.btn_update_list_print.clicked.connect(self.populate_printer_list)
+        self.ui.btn_update_list_print.setToolTip("Обновить список принтеров")  # выпадающая подсказка
 
         self.populate_printer_list()  # Заполнение списка принтеров
-        self.ui.btn_update_list_print.clicked.connect(self.populate_printer_list)
+        self.ui.select_printer.currentTextChanged.connect(self.save_change)
 
-        # сохранение выбранного значения в конфиг
+        self.ui.label_title_window.setText("Область экрана")
 
-        # self.update_button = QPushButton("Обновить список принтеров", self)
-        # self.update_button.clicked.connect(self.populate_printer_list)  # Подключение сигнала нажатия к функции
-        # self.update_button.setGeometry(10, 10, 200, 30)  # Установка позиции и размера кнопки
-        # self.ui.select_printer.currentTextChanged.connect(self.save_selected_printer)
+        self.ui.btn_show.setText("🔍 Показать текущую область")
+        self.ui.btn_show.clicked.connect(self.show_saved_area)
 
-        # self.ui.label_title_window.setText("Область экрана")
-        #
-        #
-        #
-        # self.ui.btn_show.setText("🔍 Показать текущую область")
-        # self.ui.btn_change.setText("✏ Изменить область отслеживания")
-        # self.ui.btn_enable.setText("Включить")
-        #
-        #
-        #
-        #
-        # self.populate_format_number_list()  # Заполнение списка форматов номеров
-        #
-        # self.check_config_state()  # Проверка состояния конфигурации
-        #
-        # # Привязка сигналов к обработчикам
-        #
-        # self.ui.btn_change.clicked.connect(self.activate_snipping)
-        # self.ui.btn_show.clicked.connect(self.show_saved_area)
-        # self.ui.pushButton.clicked.connect(self.toggle_theme)
-        #
-        # self.snipper = SnippingWidget()
-        # self.snipper.selection_done.connect(self.on_area_selected)
-        #
-        # # Метка обратного отсчета при выборе области
-        # self.countdown_label = QLabel("", self)
-        # self.countdown_label.setAlignment(QtCore.Qt.AlignCenter)
-        # self.countdown_label.setStyleSheet("font-size: 48px; color: white; background-color: rgba(0, 0, 0, 160);")
-        # self.countdown_label.setVisible(False)
-        # self.timer = QtCore.QTimer(self)
-        # self.timer.timeout.connect(self.update_countdown)
-        # self.countdown = 3
-        #
-        # self.apply_theme(load_config().get("theme", "light"))  # Применить тему из конфига
+        self.ui.btn_change.setText("✏ Изменить область отслеживания")
+        self.ui.btn_change.clicked.connect(self.activate_snipping)
+
+        self.snipper = SnippingWidget()
+        self.snipper.selection_done.connect(self.save_change)
+
+        self.countdown_label = QLabel("", self)
+        self.countdown_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.countdown_label.setStyleSheet("font-size: 48px; color: white; background-color: rgba(0, 0, 0, 160);")
+        self.countdown_label.setVisible(False)
+        self.timer = QtCore.QTimer(self)
+        self.timer.timeout.connect(self.update_countdown)
+        self.countdown = 3
+
+        self.btn_is_running(load_config().get("is_running", False))
+        self.ui.btn_enable.clicked.connect(lambda: self.save_change(True))
+
+        self.apply_theme(load_config().get("theme", "light"))  # Применить тему из конфига
+        self.ui.btn_change_them.clicked.connect(lambda: self.save_change(load_config().get("theme", "light")))
+
+        config = load_config()
+        is_running = config.get("is_running", False)
+        self.btn_is_running(is_running)
+
+        if is_running:
+            self.start_backend()
+
+
+    def start_backend(self):
+        if not hasattr(self, 'backend_thread') or not self.backend_thread.is_alive():
+            self.backend_thread = threading.Thread(target=main, daemon=True)
+            self.backend_thread.start()
+            print("[INFO] Бэкенд запущен")
+        else:
+            print("[INFO] Бэкенд уже работает")
+        print(self.backend_thread.is_alive())
+    def update_label_dots(self):
+        base_text = "Приложение работает"
+        dots = "." * (self.dot_animation_step % 4)  # "", ".", "..", "..."
+        self.ui.label_title_is_running.setText(f"{base_text}{dots}")
+        self.dot_animation_step += 1
+
+    def btn_is_running(self, is_running):
+        if is_running:
+            self.dot_animation_step = 0
+            self.dot_animation_timer.start(500)  # Запускаем таймер анимации label
+            self.ui.btn_enable.setText(f"Остановить")
+            self.ui.btn_enable.setStyleSheet("""
+                QPushButton#btn_enable  {
+                    background-color: red;
+                    color: white;
+                    border-radius: 6px;
+                    padding: 6px 12px;
+                    font-weight: bold;
+                }
+                QPushButton#btn_enable:hover {
+                    background-color: darkred;
+                }
+            """)
+
+        else:
+            self.ui.label_title_is_running.setText("Приложение остановлено")
+            self.ui.btn_enable.setText(f"Запустить")
+            self.ui.btn_enable.setStyleSheet("""
+                QPushButton#btn_enable {
+                    background-color: green;
+                    color: white;
+                    border-radius: 6px;
+                    padding: 6px 12px;
+                    font-weight: bold;
+                }
+                QPushButton#btn_enable:hover {
+                    background-color: darkgreen;
+                }
+            """)
+            self.dot_animation_timer.stop()
+
+    def save_change(self, *args):
+
+        config = load_config()
+        if len(args) == 1 and args[0] not in ('dark', 'light') and args[0] not in (False, True):
+            config["printer"] = args[0]
+        if len(args) == 1 and args[0] in ('dark', 'light') and args[0] not in (False, True):
+            config["theme"] = 'dark' if args[0] == 'light' else 'light'
+            self.apply_theme(args[0])
+
+        if len(args) == 1 and args[0] in (False, True):
+            config["is_running"] = not config.get("is_running", False)
+            print(config["is_running"] )
+            self.btn_is_running(config["is_running"])
+            save_config(config)
+            if config["is_running"]:
+                self.start_backend()
+                print("[INFO] Бэкенд активирован вручную")
+            else:
+                print("[INFO] Ожидание завершения — поток завершится сам при следующей проверке флага")
+
+        if len(args) > 1:
+            config["area"] = {"x": args[0], "y": args[1], "width": args[2], "height": args[3]}
+            self.show()
+            self.adjustSize()
+
+        save_config(config)
+        self.check_config_state()
 
     # Заполнение списка доступных принтеров и установка сохранённого
     def populate_printer_list(self):
+        # Отключаем временно сигнал, чтобы не вызывался save_change
+        self.ui.select_printer.blockSignals(True)
+
         self.ui.select_printer.clear()
         printers = QPrinterInfo.availablePrinters()
         printer_names = [printer.printerName() for printer in printers]
         self.ui.select_printer.addItems(printer_names)
+
         saved_printer = load_config().get("printer", "")
         if saved_printer and saved_printer in printer_names:
             index = self.ui.select_printer.findText(saved_printer)
             self.ui.select_printer.setCurrentIndex(index)
         else:
-            print(self.ui.select_printer.setCurrentIndex(-1))
             self.ui.select_printer.setCurrentIndex(-1)
 
-    def populate_format_number_list(self):
-        self.ui.select_format_number.clear()
-        self.printer_names = ["777-777", "777", "Другой формат"]
-        self.ui.select_format_number.addItems(self.printer_names)
-
-        saved_format = self.load_config().get("search_number", "")
-        if saved_format and saved_format in self.printer_names:
-            index = self.ui.select_format_number.findText(saved_format)
-            self.ui.select_format_number.setCurrentIndex(index)
-        elif saved_format:
-            self.ui.select_format_number.insertItem(0, saved_format)
-            self.ui.select_format_number.setCurrentIndex(0)
-            self.printer_names.insert(0, saved_format)
-        else:
-            self.ui.select_format_number.setCurrentIndex(-1)
-
-        # Подключаем только один раз
-        self.ui.select_format_number.currentTextChanged.connect(self.on_format_number_changed)
-
-    def restore_previous_format_selection(self):
-        saved_format = self.load_config().get("search_number", "")
-        if saved_format in self.printer_names:
-            index = self.ui.select_format_number.findText(saved_format)
-            self.ui.select_format_number.setCurrentIndex(index)
-        else:
-            self.ui.select_format_number.setCurrentIndex(-1)
-
-    def on_format_number_changed(self, text):
-        if text == "Другой формат":
-            # Отключаем временно сигнал, чтобы не сохранить "Другой формат"
-            self.ui.select_format_number.blockSignals(True)
-
-            format_text, ok = QInputDialog.getText(self, "Введите формат", "Введите свой формат номера:")
-            if ok and format_text:
-                # Добавляем в список, если его нет
-                if format_text not in self.printer_names:
-                    self.ui.select_format_number.insertItem(0, format_text)
-                    self.printer_names.insert(0, format_text)
-
-                # Устанавливаем выбранное
-                index = self.ui.select_format_number.findText(format_text)
-                self.ui.select_format_number.setCurrentIndex(index)
-
-                # Сохраняем в конфиг
-                self.save_selected_search_number(format_text)
-
-                QMessageBox.information(self, "Выбран формат", f"Вы выбрали формат: {format_text}")
-            else:
-                self.restore_previous_format_selection()
-
-            # Возвращаем сигналы обратно
-            self.ui.select_format_number.blockSignals(False)
-        else:
-            # Любой другой выбор сохраняем сразу
-            self.save_selected_search_number(text)
+        # Снова включаем сигнал
+        self.ui.select_printer.blockSignals(False)
 
     # Активация выбора области экрана с обратным отсчетом
     def activate_snipping(self):
@@ -221,18 +244,9 @@ class MainWindow(QMainWindow):
         else:
             self.countdown_label.setText(str(self.countdown))
 
-    # Обработка выбора области — сохранение в конфиг
-    def on_area_selected(self, x, y, w, h):
-        config = self.load_config()
-        config["area"] = {"x": x, "y": y, "width": w, "height": h}
-        self.save_config(config)
-        self.show()
-        self.adjustSize()
-        self.check_config_state()
-
     # Проверка наличия необходимых данных в конфиге и вывод предупреждений
     def check_config_state(self):
-        config = self.load_config()
+        config = load_config()
 
         if config.get('printer', '') == '':
             self.ui.label_error_printer.setText("Принтер не указан")
@@ -248,7 +262,7 @@ class MainWindow(QMainWindow):
 
     # Отображение сохранённой области на экране в виде зеленого прямоугольника
     def show_saved_area(self):
-        config = self.load_config()
+        config = load_config()
         area = config.get("area", {})
 
         if not all(k in area and area[k] > 0 for k in ("x", "y", "width", "height")):
@@ -277,21 +291,21 @@ class MainWindow(QMainWindow):
 
     # Переключение между светлой и тёмной темами
     def toggle_theme(self):
-        config = self.load_config()
+        config = load_config()
         current = config.get("theme", "light")
         new_theme = "dark" if current == "light" else "light"
         config["theme"] = new_theme
-        self.save_config(config)
+        save_config(config)
         self.apply_theme(new_theme)
 
     # Применение темы (светлая или тёмная)
     def apply_theme(self, theme):
         if theme == "dark":
             self.setStyleSheet(DARK_STYLE)
-            self.ui.pushButton.setText("☀️")
+            self.ui.btn_change_them.setText("☀️")
         else:
             self.setStyleSheet(LIGHT_STYLE)
-            self.ui.pushButton.setText("🌙")
+            self.ui.btn_change_them.setText("🌙")
 
 
 # Основная точка входа — запуск интерфейса и фонового потока

@@ -1,9 +1,16 @@
 import os
 import json
+from threading import Lock
+CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.json")
+OUTPUT_IMAGE = os.path.join(os.path.dirname(__file__), "screenshot.png")
 
-CONFIG_PATH = "config.json"
-OUTPUT_IMAGE = "screenshot.png"
+pattern = r'^\d+-\d+$'
 
+INTERVAL = 0.2  # интервал скриншота
+CONFIG_CHECK_INTERVAL = 0.1  # интервал проверки изменения конфига
+
+Tesseract_DIR_PATH = os.path.join(os.path.dirname(__file__), "Tesseract-OCR")
+Tesseract_FILE_PATH = os.path.join(os.path.dirname(__file__), "Tesseract-OCR/tesseract.exe")
 
 LIGHT_STYLE = """
 /* Основной фон окна с легким градиентом */
@@ -43,7 +50,7 @@ QComboBox:hover {
 }
 
 /* Кнопки */
-QPushButton#btn_change, QPushButton#btn_show {
+QPushButton {
     background-color: #4E89FF;
     color: white;
     border-radius: 8px;
@@ -51,12 +58,11 @@ QPushButton#btn_change, QPushButton#btn_show {
     font-weight: bold;
 }
 
-QPushButton#btn_change:hover, QPushButton#btn_show:hover {
+QPushButton:hover {
     background-color: #3A6FCC;
-    transition: background-color 0.3s ease;
 }
 
-QPushButton#pushButton {
+QPushButton#btn_change_them {
     background-color: black;
     color: white;
     width: 30px;
@@ -66,20 +72,20 @@ QPushButton#pushButton {
     font-size: 16px;
 }
 
-QPushButton#pushButton:hover {
-    background-color: #3A3A3A;  /* немного серее при наведении */
+QPushButton#btn_change_them:hover {
+    background-color: #3A6FCC;  /* немного серее при наведении */
 }
-QPushButton#btn_update_list_print {
+QPushButton#btn_update_list_print{
                 background-color: #4E89FF;
                 color: white;
                 font-size: 25px; /* Увеличение размера символа */
-                border-radius:1px;
+                border-radius:6px;
 }
 QPushButton#btn_update_list_print:hover {
-    background-color: #3A3A3A;
+    background-color: #3A6FCC;
 }
 QPushButton#btn_update_list_print:pressed {
-    background-color: #555555;
+    background-color: #4E89FF;
 }
 """
 
@@ -120,10 +126,9 @@ QPushButton#btn_change, QPushButton#btn_show {
 
 QPushButton#btn_change:hover, QPushButton#btn_show:hover {
     background-color: #4f4f4f;
-    transition: background-color 0.3s ease;
 }
 
-QPushButton#pushButton {
+QPushButton#btn_change_them {
     background-color: white;
     color: white;
     width: 30px;
@@ -133,39 +138,42 @@ QPushButton#pushButton {
     font-size: 16px;
 }
 
-QPushButton#pushButton:hover {
-    background-color: #3A3A3A;  /* немного серее при наведении */
+QPushButton#btn_change_them:hover {
+    background-color: #4E89FF;  /* немного серее при наведении */
 }
 QPushButton#btn_update_list_print {
-                background-color: #2b2d30;
+                background-color: #676767;
                 color: white;
                 font-size: 25px; /* Увеличение размера символа */
-                border-radius:1px;
+                border-radius:6px;
 }
 QPushButton#btn_update_list_print:hover {
-    background-color: #676767;
+    background-color: #4f4f4f;
 }
 QPushButton#btn_update_list_print:pressed {
     background-color: #555555;
 }
 """
+config_lock = Lock()  # глобальный замок для синхронизации доступа
 
+# Загрузка конфигурации из файла
 def load_config():
     if os.path.exists(CONFIG_PATH):
         try:
-            with open(CONFIG_PATH, "r", encoding="utf-8") as f:
-                return json.load(f)
+            with config_lock:
+                if os.path.getsize(CONFIG_PATH) == 0:
+                    raise ValueError("Файл пустой")
+                with open(CONFIG_PATH, "r", encoding="utf-8") as f:
+                    return json.load(f)
         except Exception as e:
             print(f"[Ошибка чтения конфига]: {e}")
     return {}
 
-
-
-
 # Сохранение данных в конфигурационный файл
 def save_config(config):
     try:
-        with open(CONFIG_PATH, "w", encoding="utf-8") as f:
-            json.dump(config, f, ensure_ascii=False, indent=2)
+        with config_lock:
+            with open(CONFIG_PATH, "w", encoding="utf-8") as f:
+                json.dump(config, f, ensure_ascii=False, indent=2)
     except Exception as e:
         print(f"[Ошибка сохранения конфига]: {e}")

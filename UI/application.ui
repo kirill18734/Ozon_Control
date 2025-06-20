@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>550</width>
-    <height>350</height>
+    <height>370</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>550</width>
-    <height>350</height>
+    <height>370</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>550</width>
-    <height>350</height>
+    <height>370</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -44,7 +44,7 @@
       <x>0</x>
       <y>0</y>
       <width>550</width>
-      <height>400</height>
+      <height>370</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -188,7 +188,7 @@
       <rect>
        <x>10</x>
        <y>190</y>
-       <width>241</width>
+       <width>251</width>
        <height>100</height>
       </rect>
      </property>
@@ -216,9 +216,9 @@
     <widget class="QPushButton" name="btn_change">
      <property name="geometry">
       <rect>
-       <x>260</x>
+       <x>280</x>
        <y>190</y>
-       <width>281</width>
+       <width>261</width>
        <height>100</height>
       </rect>
      </property>
@@ -247,7 +247,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>303</y>
+       <y>320</y>
        <width>531</width>
        <height>41</height>
       </rect>
@@ -281,9 +281,9 @@
     <widget class="QComboBox" name="select_printer">
      <property name="geometry">
       <rect>
-       <x>260</x>
+       <x>280</x>
        <y>100</y>
-       <width>221</width>
+       <width>211</width>
        <height>31</height>
       </rect>
      </property>
@@ -294,6 +294,43 @@
       </size>
      </property>
     </widget>
+    <widget class="QLabel" name="label_title_is_running">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>300</y>
+       <width>511</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>6</pointsize>
+       <kerning>true</kerning>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>Приложение отключено</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+    <zorder>label_title_is_running</zorder>
+    <zorder>label_text_select_printer</zorder>
+    <zorder>lable_title_printer</zorder>
+    <zorder>label_title_window</zorder>
+    <zorder>btn_change_them</zorder>
+    <zorder>label_error_show</zorder>
+    <zorder>label_error_printer</zorder>
+    <zorder>btn_show</zorder>
+    <zorder>btn_change</zorder>
+    <zorder>btn_enable</zorder>
+    <zorder>btn_update_list_print</zorder>
+    <zorder>select_printer</zorder>
    </widget>
   </widget>
  </widget>
