@@ -11,6 +11,7 @@ from print_text import print_text
 app = Flask(__name__)
 CORS(app)
 
+
 @app.route('/print', methods=['POST'])
 def print_from_data():
     try:
@@ -69,7 +70,8 @@ def main_expansion():
                         last_config_mtime = current_mtime
                         print(f"[INFO] Конфиг обновлён: is_running={is_running}")
 
-                        if is_running and (flask_process is None or not flask_process.is_alive()) and config['mode'] == 'expansion':
+                        if is_running and (flask_process is None or not flask_process.is_alive()) and config[
+                            'mode'] == 'expansion':
                             print("[INFO] Запуск Flask-сервера...")
                             free_port(PORT)
                             flask_process = multiprocessing.Process(target=run_flask, daemon=True)

@@ -1,6 +1,5 @@
 import time
 from time import sleep
-import win32ui
 from PIL import Image
 import pytesseract
 import os
