@@ -15,9 +15,7 @@ Ozon Control - это небольшая утилита для Windows, кото
 
 | Светлая тема | Тёмная тема |
 |--------------|-------------|
-| ![Светлая тема](![image](https://github.com/user-attachments/assets/daedd6e2-6383-408a-b8bf-798eb057f36f)
-) | ![Тёмная тема](![image](https://github.com/user-attachments/assets/f59a183a-e583-45c2-b469-2e92217b9a5a)
-) |
+
 
 ## Требования
 
