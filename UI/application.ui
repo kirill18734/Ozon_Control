@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Настройки мониторинга экрана и печати</string>
+   <string>Ozon Control</string>
   </property>
   <property name="styleSheet">
    <string notr="true"/>

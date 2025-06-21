@@ -1,3 +1,4 @@
+import os
 import sys
 import threading
 
@@ -82,7 +83,10 @@ class MainWindow(QMainWindow):
 
         # Установка начальных текстов и заголовков
         # Заголовок приложения
-        self.setWindowTitle("Настройки мониторинга экрана и печати")
+        self.setWindowTitle("Ozon Control")
+        icon_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "icon.png")
+        if os.path.exists(icon_path):
+            self.setWindowIcon(QtGui.QIcon(icon_path))
 
         # Принтер
         self.ui.lable_title_printer.setText("Принтер")

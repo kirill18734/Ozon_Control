@@ -126,7 +126,7 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 \u043c\u043e\u043d\u0438\u0442\u043e\u0440\u0438\u043d\u0433\u0430 \u044d\u043a\u0440\u0430\u043d\u0430 \u0438 \u043f\u0435\u0447\u0430\u0442\u0438", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Ozon Control", None))
         self.label_text_select_printer.setText(QCoreApplication.translate("MainWindow", u"\u0412\u044b\u0431\u043e\u0440 \u043f\u0440\u0438\u043d\u0442\u0435\u0440\u0430", None))
         self.lable_title_printer.setText(QCoreApplication.translate("MainWindow", u"\u041f\u0440\u0438\u043d\u0442\u0435\u0440", None))
         self.label_title_window.setText(QCoreApplication.translate("MainWindow", u" \u041e\u0431\u043b\u0430\u0441\u0442\u044c \u044d\u043a\u0440\u0430\u043d\u0430", None))
