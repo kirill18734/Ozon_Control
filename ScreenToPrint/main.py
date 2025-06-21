@@ -9,10 +9,12 @@ from config import load_config, OUTPUT_IMAGE, CONFIG_PATH, Tesseract_FILE_PATH, 
     CONFIG_CHECK_INTERVAL, pattern, INTERVAL
 import re
 
+from print_text import print_text
+
+
 def load_area_from_config():
         config = load_config()
         area = config.get("area", {})
-        print(area)
         x = area.get("x", 0)
         y = area.get("y", 0)
         width = area.get("width", 100)
@@ -29,45 +31,10 @@ def ImageText():
 
     # Распознай текст
     text = pytesseract.image_to_string(img)
-    return str(text).rstrip().lstrip()
+    return text.replace(' ', '')
 
 
-def print_text(text):
-    if load_config()["printer"] != '' and text:
-        try:
-            # Создаем контекст принтера
-            printer_dc = win32ui.CreateDC()
-            printer_dc.CreatePrinterDC(load_config()["printer"])
-
-            # Получаем размер printable area
-            horz_res = printer_dc.GetDeviceCaps(8)  # HORZRES
-            vert_res = printer_dc.GetDeviceCaps(10)  # VERTRES
-            # Создаем шрифт
-            font = win32ui.CreateFont({
-                "name": "Arial",
-                "height": 100,  # Размер шрифта
-                "weight": 600,
-            })
-            printer_dc.SelectObject(font)
-
-            # Вычисляем размеры текста
-            text_size = printer_dc.GetTextExtent(text)
-            text_width, text_height = text_size
-
-            # Центрируем
-            x = (horz_res - text_width) // 2
-            y = (vert_res - text_height) // 2
-
-            # Печать
-            printer_dc.StartDoc("Centered Text")
-            printer_dc.StartPage()
-            printer_dc.TextOut(x, y, text)
-            printer_dc.EndPage()
-            printer_dc.EndDoc()
-            printer_dc.DeleteDC()
-        except Exception as e:
-            print('Ошибка при печати:', e)
-def main():
+def main_neiro():
     last_coords = None
     last_config_mtime = 0
     last_config_check = 0
@@ -105,18 +72,19 @@ def main():
                 screenshot.save(OUTPUT_IMAGE, "png")
 
                 text = ImageText()
-                # print("Найденный текст:", text, "| Длина:", len(text))
-                print(text != last_text)
-                if text != last_text and re.fullmatch(pattern, text):
-                    if not first_valid_skipped:
-                        # Пропускаем первую подходящую строку
-                        print(f"[INFO] Пропущен первый валидный текст: {text}")
-                        first_valid_skipped = True
-                    else:
-                        print("[INFO] Распечатка текста")
-                        # print_text(text)
-                        print_text(f"{str(text).split('-')[0]}.")
-                    last_text = text
+                print("Найденный текст:", text, "| Длина:", len(text))
+                # print(text != last_text)
+                if text != last_text:
+                    match = re.search(pattern, text)
+                    if match:
+                        found_number = match.group()
+                        if not first_valid_skipped:
+                            print(f"[INFO] Пропущен первый валидный текст: {found_number}")
+                            first_valid_skipped = True
+                        else:
+                            print("[INFO] Распечатка текста")
+                            print_text(f"{found_number.split('-')[0]}.")
+                        last_text = text
 
             sleep(INTERVAL)  # или INTERVAL
 

@@ -15,8 +15,9 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QLabel,
-    QMainWindow, QPushButton, QSizePolicy, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QFrame,
+    QLabel, QMainWindow, QPushButton, QSizePolicy,
+    QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -64,12 +65,12 @@ class Ui_MainWindow(object):
         self.btn_change_them.setStyleSheet(u"")
         self.label_error_show = QLabel(self.frame)
         self.label_error_show.setObjectName(u"label_error_show")
-        self.label_error_show.setGeometry(QRect(30, 40, 211, 20))
+        self.label_error_show.setGeometry(QRect(170, 170, 211, 20))
         self.label_error_show.setStyleSheet(u"color:red;")
         self.label_error_show.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label_error_printer = QLabel(self.frame)
         self.label_error_printer.setObjectName(u"label_error_printer")
-        self.label_error_printer.setGeometry(QRect(30, 20, 211, 20))
+        self.label_error_printer.setGeometry(QRect(320, 70, 211, 20))
         self.label_error_printer.setStyleSheet(u"color:red;")
         self.label_error_printer.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.btn_show = QPushButton(self.frame)
@@ -88,7 +89,7 @@ class Ui_MainWindow(object):
         self.btn_change.setFont(font2)
         self.btn_enable = QPushButton(self.frame)
         self.btn_enable.setObjectName(u"btn_enable")
-        self.btn_enable.setGeometry(QRect(10, 320, 531, 41))
+        self.btn_enable.setGeometry(QRect(10, 320, 521, 41))
         self.btn_update_list_print = QPushButton(self.frame)
         self.btn_update_list_print.setObjectName(u"btn_update_list_print")
         self.btn_update_list_print.setGeometry(QRect(500, 100, 31, 31))
@@ -112,12 +113,22 @@ class Ui_MainWindow(object):
         self.btn_github = QPushButton(self.frame)
         self.btn_github.setObjectName(u"btn_github")
         self.btn_github.setGeometry(QRect(10, 370, 31, 31))
+        self.label_expansion = QLabel(self.frame)
+        self.label_expansion.setObjectName(u"label_expansion")
+        self.label_expansion.setGeometry(QRect(10, 10, 91, 41))
+        self.label_expansion.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.label_neiro = QLabel(self.frame)
+        self.label_neiro.setObjectName(u"label_neiro")
+        self.label_neiro.setGeometry(QRect(180, 10, 61, 41))
+        self.btn_select_run = QCheckBox(self.frame)
+        self.btn_select_run.setObjectName(u"btn_select_run")
+        self.btn_select_run.setGeometry(QRect(110, 20, 41, 20))
+        self.lable_title_printer.raise_()
+        self.label_error_show.raise_()
         self.label_title_is_running.raise_()
         self.label_text_select_printer.raise_()
-        self.lable_title_printer.raise_()
         self.label_title_window.raise_()
         self.btn_change_them.raise_()
-        self.label_error_show.raise_()
         self.label_error_printer.raise_()
         self.btn_show.raise_()
         self.btn_change.raise_()
@@ -126,6 +137,9 @@ class Ui_MainWindow(object):
         self.select_printer.raise_()
         self.btn_help.raise_()
         self.btn_github.raise_()
+        self.label_expansion.raise_()
+        self.label_neiro.raise_()
+        self.btn_select_run.raise_()
         MainWindow.setCentralWidget(self.centralwidget)
 
         # self.retranslateUi(MainWindow)
@@ -154,5 +168,9 @@ class Ui_MainWindow(object):
         self.label_title_is_running.setText(QCoreApplication.translate("MainWindow", u"\u041f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u0435 \u043e\u0442\u043a\u043b\u044e\u0447\u0435\u043d\u043e", None))
         self.btn_help.setText(QCoreApplication.translate("MainWindow", u"\u2139 \u041e \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u043c\u0435", None))
         self.btn_github.setText("")
+        self.label_expansion.setText(QCoreApplication.translate("MainWindow", u"\u0420\u0430\u0441\u0448\u0438\u0440\u0435\u043d\u0438\u0435\n"
+"(\u0440\u0435\u043a\u043e\u043c\u0435\u043d\u0434\u0443\u0435\u0442\u0441\u044f)", None))
+        self.label_neiro.setText(QCoreApplication.translate("MainWindow", u"\u041d\u0435\u0439\u0440\u043e\u0441\u0435\u0442\u044c", None))
+        self.btn_select_run.setText("")
     # retranslateUi
 
