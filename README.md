@@ -13,7 +13,7 @@
 
 | Светлая тема | Тёмная тема |
 |-|-------------|
-|![img_5.png](img_5.png)|![img_4.png](img_4.png)|
+|![img_5.png](img_black.png)|![img_4.png](img_white.png)|
 
 ## Требования
 
