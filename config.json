@@ -7,7 +7,7 @@
     "width": 65,
     "height": 45
   },
-  "theme": "dark",
-  "is_running": true,
+  "theme": "light",
+  "is_running": false,
   "mode": "expansion"
 }
