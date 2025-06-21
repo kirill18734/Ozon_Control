@@ -1,8 +1,11 @@
 import os
 import sys
 import threading
+import webbrowser
 
-from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QWidget
+from PySide6.QtCore import QSize
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QWidget, QMessageBox
 from PySide6.QtPrintSupport import QPrinterInfo
 from PySide6 import QtCore, QtGui, QtWidgets
 
@@ -83,7 +86,7 @@ class MainWindow(QMainWindow):
 
         # Установка начальных текстов и заголовков
         # Заголовок приложения
-        self.setWindowTitle("Ozon Control")
+        self.setWindowTitle("Печать ячеек")
         icon_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "icon.png")
         if os.path.exists(icon_path):
             self.setWindowIcon(QtGui.QIcon(icon_path))
@@ -105,7 +108,7 @@ class MainWindow(QMainWindow):
 
         self.ui.btn_change.setText("✏ Изменить область отслеживания")
         self.ui.btn_change.clicked.connect(self.activate_snipping)
-
+        self.ui.btn_github.setIconSize(QSize(24, 24))
         self.snipper = SnippingWidget()
         self.snipper.selection_done.connect(self.save_change)
 
@@ -121,7 +124,16 @@ class MainWindow(QMainWindow):
         self.ui.btn_enable.clicked.connect(lambda: self.save_change(True))
 
         self.apply_theme(load_config().get("theme", "light"))  # Применить тему из конфига
-        self.ui.btn_change_them.clicked.connect(lambda: self.save_change('dark'  if load_config().get("theme", "light") == 'light' else 'light'))
+        self.ui.btn_change_them.clicked.connect(
+            lambda: self.save_change('dark' if load_config().get("theme", "light") == 'light' else 'light'))
+
+        # Устанавливаем текст кнопки
+        self.ui.btn_help.setText("ℹ О программе")
+
+        # Подключаем кнопку GitHub
+        self.ui.btn_github.clicked.connect(self.open_github)
+        # Подключаем событие нажатия
+        self.ui.btn_help.clicked.connect(self.show_help_info)
 
         config = load_config()
         is_running = config.get("is_running", False)
@@ -131,6 +143,22 @@ class MainWindow(QMainWindow):
             self.start_backend()
 
         self.check_config_state()
+
+    def open_github(self):
+        webbrowser.open("https://github.com/kirill18734/Ozon_Control")
+
+    def show_help_info(self):
+        QMessageBox.information(
+            self,
+            "О программе",
+            "🔍 Это небольшая утилита для Windows, которая:\n\n"
+            "• Автоматически отслеживает указанную область экрана\n"
+            "• Распознаёт номер (или другой текст) с помощью Tesseract OCR\n"
+            "• Отправляет найденный текст на выбранный принтер\n\n"
+            "Вы можете выбрать принтер, задать координаты области и запустить фоновую проверку.\n\n"
+            "Программа предназначена для автоматизации печати найденных чисел, например, в накладных, чеках и т.д."
+        )
+
     def start_backend(self):
         if not hasattr(self, 'backend_thread') or not self.backend_thread.is_alive():
             self.backend_thread = threading.Thread(target=main, daemon=True)
@@ -139,6 +167,7 @@ class MainWindow(QMainWindow):
         else:
             print("[INFO] Бэкенд уже работает")
         print(self.backend_thread.is_alive())
+
     def update_label_dots(self):
         base_text = "Приложение работает"
         dots = "." * (self.dot_animation_step % 4)  # "", ".", "..", "..."
@@ -191,7 +220,7 @@ class MainWindow(QMainWindow):
             self.apply_theme(args[0])
         if len(args) == 1 and args[0] in (False, True):
             config["is_running"] = not config.get("is_running", False)
-            print(config["is_running"] )
+            print(config["is_running"])
             self.btn_is_running(config["is_running"])
             save_config(config)
             if config["is_running"]:
@@ -298,10 +327,14 @@ class MainWindow(QMainWindow):
         if theme == "dark":
             self.setStyleSheet(DARK_STYLE)
             self.ui.btn_change_them.setText("☀️")
+            # Устанавливаем иконку вручную
+            self.ui.btn_github.setIcon(QIcon("icons/github_white.svg"))
+
         else:
             self.setStyleSheet(LIGHT_STYLE)
             self.ui.btn_change_them.setText("🌙")
-
+            # Устанавливаем иконку вручную
+            self.ui.btn_github.setIcon(QIcon("icons/github_black.svg"))
 
 # Основная точка входа — запуск интерфейса и фонового потока
 def run():

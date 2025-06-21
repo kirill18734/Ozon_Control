@@ -22,9 +22,9 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(550, 370)
-        MainWindow.setMinimumSize(QSize(550, 370))
-        MainWindow.setMaximumSize(QSize(550, 370))
+        MainWindow.resize(550, 410)
+        MainWindow.setMinimumSize(QSize(550, 410))
+        MainWindow.setMaximumSize(QSize(550, 410))
         MainWindow.setStyleSheet(u"")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
@@ -32,7 +32,7 @@ class Ui_MainWindow(object):
         self.centralwidget.setStyleSheet(u"")
         self.frame = QFrame(self.centralwidget)
         self.frame.setObjectName(u"frame")
-        self.frame.setGeometry(QRect(0, 0, 550, 370))
+        self.frame.setGeometry(QRect(0, 0, 550, 410))
         self.frame.setFrameShape(QFrame.Shape.StyledPanel)
         self.frame.setFrameShadow(QFrame.Shadow.Raised)
         self.label_text_select_printer = QLabel(self.frame)
@@ -106,6 +106,12 @@ class Ui_MainWindow(object):
         self.label_title_is_running.setFont(font3)
         self.label_title_is_running.setStyleSheet(u"")
         self.label_title_is_running.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.btn_help = QPushButton(self.frame)
+        self.btn_help.setObjectName(u"btn_help")
+        self.btn_help.setGeometry(QRect(450, 380, 91, 24))
+        self.btn_github = QPushButton(self.frame)
+        self.btn_github.setObjectName(u"btn_github")
+        self.btn_github.setGeometry(QRect(10, 370, 31, 31))
         self.label_title_is_running.raise_()
         self.label_text_select_printer.raise_()
         self.lable_title_printer.raise_()
@@ -118,6 +124,8 @@ class Ui_MainWindow(object):
         self.btn_enable.raise_()
         self.btn_update_list_print.raise_()
         self.select_printer.raise_()
+        self.btn_help.raise_()
+        self.btn_github.raise_()
         MainWindow.setCentralWidget(self.centralwidget)
 
         # self.retranslateUi(MainWindow)
@@ -126,7 +134,7 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Ozon Control", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"\u041f\u0435\u0447\u0430\u0442\u044c \u044f\u0447\u0435\u0435\u043a", None))
         self.label_text_select_printer.setText(QCoreApplication.translate("MainWindow", u"\u0412\u044b\u0431\u043e\u0440 \u043f\u0440\u0438\u043d\u0442\u0435\u0440\u0430", None))
         self.lable_title_printer.setText(QCoreApplication.translate("MainWindow", u"\u041f\u0440\u0438\u043d\u0442\u0435\u0440", None))
         self.label_title_window.setText(QCoreApplication.translate("MainWindow", u" \u041e\u0431\u043b\u0430\u0441\u0442\u044c \u044d\u043a\u0440\u0430\u043d\u0430", None))
@@ -144,5 +152,7 @@ class Ui_MainWindow(object):
         self.btn_update_list_print.setShortcut("")
 #endif // QT_CONFIG(shortcut)
         self.label_title_is_running.setText(QCoreApplication.translate("MainWindow", u"\u041f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u0435 \u043e\u0442\u043a\u043b\u044e\u0447\u0435\u043d\u043e", None))
+        self.btn_help.setText(QCoreApplication.translate("MainWindow", u"\u2139 \u041e \u043f\u0440\u043e\u0433\u0440\u0430\u043c\u043c\u0435", None))
+        self.btn_github.setText("")
     # retranslateUi
 

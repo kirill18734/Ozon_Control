@@ -88,6 +88,20 @@ QPushButton#btn_update_list_print:hover {
 QPushButton#btn_update_list_print:pressed {
     background-color: #4E89FF;
 }
+QPushButton#btn_github {
+    border: 1px solid black;
+    border-radius:15px;
+}
+QPushButton#btn_github:hover{
+    border: 1px solid white;
+}
+QPushButton#btn_help {
+    border: 1px solid black;
+    border-radius:10px;
+}
+QPushButton#btn_help:hover{
+    border: 1px solid white;
+}
 """
 
 DARK_STYLE = """
@@ -153,6 +167,22 @@ QPushButton#btn_update_list_print:hover {
 }
 QPushButton#btn_update_list_print:pressed {
     background-color: #555555;
+}
+QPushButton#btn_github {
+    border: 1px solid white;
+    color:white;
+    border-radius:15px;
+}
+QPushButton#btn_github:hover{
+    border: 1px solid  #2b2d30;;
+}
+QPushButton#btn_help {
+    border: 1px solid white;
+    color: white;
+    border-radius:10px;
+}
+QPushButton#btn_help:hover{
+    border: 1px solid  #2b2d30;;
 }
 """
 config_lock = Lock()  # глобальный замок для синхронизации доступа
