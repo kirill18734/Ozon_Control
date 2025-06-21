@@ -178,6 +178,9 @@ class MainWindow(QMainWindow):
         self.snipper = SnippingWidget()
         self.snipper.selection_done.connect(self.save_change)
 
+        # Управляем доступностью кнопок в зависимости от режима
+        self.update_area_buttons_state(load_config().get("mode", "expansion"))
+
         self.countdown_label = QLabel("", self)
         self.countdown_label.setAlignment(QtCore.Qt.AlignCenter)
         self.countdown_label.setStyleSheet("font-size: 48px; color: white; background-color: rgba(0, 0, 0, 160);")
@@ -280,6 +283,11 @@ class MainWindow(QMainWindow):
             """)
             self.dot_animation_timer.stop()
 
+    def update_area_buttons_state(self, mode):
+        is_neiro = mode == 'neiro'
+        self.ui.btn_show.setEnabled(is_neiro)
+        self.ui.btn_change.setEnabled(is_neiro)
+
     def save_change(self, *args):
         config = load_config()
         if len(args) == 1 and args[0] not in ('dark', 'light') and args[0] not in (False, True) and args[0] not in ('expansion', 'neiro'):
@@ -291,6 +299,7 @@ class MainWindow(QMainWindow):
             config["is_running"] = False  # ⛔ остановка текущего режима
             config["mode"] = args[0]  # 💾 смена режима
             self.btn_is_running(False)  # 🔘 обновление интерфейса
+            self.update_area_buttons_state(args[0])
 
         if len(args) == 1 and args[0] in (False, True):
             config["is_running"] = not config.get("is_running", False)
@@ -353,6 +362,9 @@ class MainWindow(QMainWindow):
     # Проверка наличия необходимых данных в конфиге и вывод предупреждений
     def check_config_state(self):
         config = load_config()
+
+        # Активируем или деактивируем кнопки в зависимости от режима
+        self.update_area_buttons_state(config.get("mode", "expansion"))
 
         if config.get('printer', '') == '':
             self.ui.label_error_printer.setText("Принтер не указан")
