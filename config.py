@@ -65,6 +65,12 @@ QPushButton#btn_change:hover,QPushButton#btn_show:hover {
     background-color: #3A6FCC;
 }
 
+/* Стиль для отключённых кнопок */
+QPushButton#btn_change:disabled, QPushButton#btn_show:disabled {
+    background-color: #b0b0b0;
+    color: #666666;
+}
+
 QPushButton#btn_change_them {
     background-color: black;
     color: white;
@@ -144,6 +150,12 @@ QPushButton#btn_change, QPushButton#btn_show {
 
 QPushButton#btn_change:hover, QPushButton#btn_show:hover {
     background-color: #4f4f4f;
+}
+
+/* Стиль для отключённых кнопок */
+QPushButton#btn_change:disabled, QPushButton#btn_show:disabled {
+    background-color: #444444;
+    color: #888888;
 }
 
 QPushButton#btn_change_them {
