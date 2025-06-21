@@ -235,7 +235,7 @@ class MainWindow(QMainWindow):
             else:
                 self.backend_thread = threading.Thread(target=main_expansion, daemon=True)
                 self.backend_thread.start()
-                print("[INFO] Бэкенд запущен для нейросети запущен")
+                print("[INFO] Бэкенд запущен для расширения запущен")
         else:
             print("[INFO] Бэкенд уже работает")
 
@@ -289,7 +289,10 @@ class MainWindow(QMainWindow):
             config["theme"] = args[0]
             self.apply_theme(args[0])
         if args[0] in ('expansion', 'neiro'):
-            config["mode"] = args[0]
+            config["is_running"] = False  # ⛔ остановка текущего режима
+            config["mode"] = args[0]  # 💾 смена режима
+            self.btn_is_running(False)  # 🔘 обновление интерфейса
+
         if len(args) == 1 and args[0] in (False, True):
             config["is_running"] = not config.get("is_running", False)
             self.btn_is_running(config["is_running"])

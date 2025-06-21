@@ -35,6 +35,7 @@ def ImageText():
 
 
 def main_neiro():
+    print("[INFO] main_neiro запущен")
     last_coords = None
     last_config_mtime = 0
     last_config_check = 0

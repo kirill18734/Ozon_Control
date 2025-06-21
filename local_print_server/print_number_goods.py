@@ -75,13 +75,13 @@ def main_expansion():
                             flask_process = multiprocessing.Process(target=run_flask, daemon=True)
                             flask_process.start()
 
-                        elif not is_running and flask_process and flask_process.is_alive() and config['mode'] != 'expansion':
+                        elif not is_running and flask_process and flask_process.is_alive():
                             print("[INFO] Остановка Flask-сервера...")
                             flask_process.terminate()
                             flask_process.join()
                             flask_process = None
                             print("[INFO] Flask-сервер остановлен.")
-
+                            break
                 last_config_check = now
 
             time.sleep(0.5)
