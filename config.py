@@ -6,12 +6,15 @@ OUTPUT_IMAGE = os.path.join(os.path.dirname(__file__), "screenshot.png")
 
 pattern = r'^\d+-\d+$'
 
+PORT = 4025
 INTERVAL = 0.2  # интервал скриншота
 CONFIG_CHECK_INTERVAL = 0.1  # интервал проверки изменения конфига
 
 Tesseract_DIR_PATH = os.path.join(os.path.dirname(__file__), "Tesseract-OCR")
 Tesseract_FILE_PATH = os.path.join(os.path.dirname(__file__), "Tesseract-OCR/tesseract.exe")
-
+Title_icon = os.path.join(os.path.dirname(__file__), "UI/icons/title_icon.png")
+Github_icon_black =  os.path.join(os.path.dirname(__file__), "UI/icons/github_black.svg")
+Github_icon_white =  os.path.join(os.path.dirname(__file__), "UI/icons/github_white.svg")
 LIGHT_STYLE = """
 /* Основной фон окна с легким градиентом */
 QMainWindow {
@@ -88,6 +91,20 @@ QPushButton#btn_update_list_print:hover {
 QPushButton#btn_update_list_print:pressed {
     background-color: #4E89FF;
 }
+QPushButton#btn_github {
+    border: 1px solid black;
+    border-radius:15px;
+}
+QPushButton#btn_github:hover{
+    border: 1px solid white;
+}
+QPushButton#btn_help {
+    border: 1px solid black;
+    border-radius:10px;
+}
+QPushButton#btn_help:hover{
+    border: 1px solid white;
+}
 """
 
 DARK_STYLE = """
@@ -153,6 +170,22 @@ QPushButton#btn_update_list_print:hover {
 }
 QPushButton#btn_update_list_print:pressed {
     background-color: #555555;
+}
+QPushButton#btn_github {
+    border: 1px solid white;
+    color:white;
+    border-radius:15px;
+}
+QPushButton#btn_github:hover{
+    border: 1px solid  #2b2d30;;
+}
+QPushButton#btn_help {
+    border: 1px solid white;
+    color: white;
+    border-radius:10px;
+}
+QPushButton#btn_help:hover{
+    border: 1px solid  #2b2d30;;
 }
 """
 config_lock = Lock()  # глобальный замок для синхронизации доступа

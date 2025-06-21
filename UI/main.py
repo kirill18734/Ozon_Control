@@ -1,17 +1,77 @@
+import os
 import sys
 import threading
+import webbrowser
 
-from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QWidget
+from PySide6.QtCore import QSize
+from PySide6.QtGui import QIcon
+from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QWidget, QMessageBox
 from PySide6.QtPrintSupport import QPrinterInfo
 from PySide6 import QtCore, QtGui, QtWidgets
 
-from ScreenToPrint.main import main
+from ScreenToPrint.main import  main_neiro
 from UI.ui_mainwindow import Ui_MainWindow
 
-from config import DARK_STYLE, LIGHT_STYLE, load_config, save_config
+from config import DARK_STYLE, LIGHT_STYLE, load_config, save_config, Title_icon, Github_icon_black, Github_icon_white
 
 
 # pyside6-uic application.ui -o ui_mainwindow.py
+from PySide6.QtWidgets import QCheckBox
+from PySide6.QtCore import QPropertyAnimation, QEasingCurve, Qt, Property
+from PySide6.QtGui import QPainter, QColor, QMouseEvent
+
+from local_print_server.print_number_goods import main_expansion
+
+
+class ToggleSwitch(QCheckBox):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setFixedSize(60, 30)
+        self._circle_pos_internal = 3
+        self.setCursor(Qt.PointingHandCursor)
+        self.setFocusPolicy(Qt.NoFocus)
+
+        self.animation = QPropertyAnimation(self, b"circle_position")
+        self.animation.setDuration(200)
+        self.animation.setEasingCurve(QEasingCurve.InOutQuad)
+
+        self.stateChanged.connect(self.start_transition)
+
+    def mouseReleaseEvent(self, event: QMouseEvent):
+        if event.button() == Qt.LeftButton:
+            self.toggle()
+        super().mouseReleaseEvent(event)
+
+    def start_transition(self, value):
+        start = self._circle_pos_internal
+        end = self.width() - self.height() + 3 if value else 3
+
+        self.animation.stop()
+        self.animation.setStartValue(start)
+        self.animation.setEndValue(end)
+        self.animation.start()
+
+    def paintEvent(self, event):
+        p = QPainter(self)
+        p.setRenderHint(QPainter.Antialiasing)
+        p.setPen(Qt.NoPen)
+
+        # Фон
+        p.setBrush(QColor("darkgreen") if self.isChecked() else QColor("green"))
+        p.drawRoundedRect(0, 0, self.width(), self.height(), self.height() / 2, self.height() / 2)
+
+        # Кружок
+        p.setBrush(QColor("#ffffff"))
+        p.drawEllipse(int(self._circle_pos_internal), 3, self.height() - 6, self.height() - 6)
+
+    def get_circle_position(self):
+        return self._circle_pos_internal
+
+    def set_circle_position(self, pos):
+        self._circle_pos_internal = pos
+        self.update()
+
+    circle_position = Property(float, get_circle_position, set_circle_position)
 
 # Класс виджета для выбора области экрана пользователем
 class SnippingWidget(QtWidgets.QMainWindow):
@@ -82,8 +142,22 @@ class MainWindow(QMainWindow):
 
         # Установка начальных текстов и заголовков
         # Заголовок приложения
-        self.setWindowTitle("Настройки мониторинга экрана и печати")
+        self.setWindowTitle("Печать ячеек")
+        self.setWindowIcon(QtGui.QIcon(Title_icon))
 
+        self.ui.label_expansion.setText("Расширение\n(рекомендуется)")
+        self.ui.label_neiro.setText("Нейросеть")
+        # Удаляем старый чекбокс
+        self.ui.btn_select_run.deleteLater()
+
+        # Создаём новый кастомный переключатель
+        self.toggle_switch = ToggleSwitch(self.ui.frame)
+        self.toggle_switch.setObjectName("btn_select_run")
+        self.toggle_switch.setGeometry(QtCore.QRect(110, 20, 60, 30))  # чуть шире
+        # Устанавливаем состояние переключателя в зависимости от значения в конфиге
+        # True, если режим 'neiro', иначе False
+        self.toggle_switch.setChecked(load_config()['mode']== 'neiro')
+        self.toggle_switch.stateChanged.connect(  lambda: self.save_change('neiro' if load_config().get("mode", "expansion") == 'expansion' else 'expansion'))
         # Принтер
         self.ui.lable_title_printer.setText("Принтер")
         self.ui.label_text_select_printer.setText("Выбор принтера")
@@ -101,7 +175,7 @@ class MainWindow(QMainWindow):
 
         self.ui.btn_change.setText("✏ Изменить область отслеживания")
         self.ui.btn_change.clicked.connect(self.activate_snipping)
-
+        self.ui.btn_github.setIconSize(QSize(24, 24))
         self.snipper = SnippingWidget()
         self.snipper.selection_done.connect(self.save_change)
 
@@ -117,7 +191,16 @@ class MainWindow(QMainWindow):
         self.ui.btn_enable.clicked.connect(lambda: self.save_change(True))
 
         self.apply_theme(load_config().get("theme", "light"))  # Применить тему из конфига
-        self.ui.btn_change_them.clicked.connect(lambda: self.save_change('dark'  if load_config().get("theme", "light") == 'light' else 'light'))
+        self.ui.btn_change_them.clicked.connect(
+            lambda: self.save_change('dark' if load_config().get("theme", "light") == 'light' else 'light'))
+
+        # Устанавливаем текст кнопки
+        self.ui.btn_help.setText("ℹ О программе")
+
+        # Подключаем кнопку GitHub
+        self.ui.btn_github.clicked.connect(self.open_github)
+        # Подключаем событие нажатия
+        self.ui.btn_help.clicked.connect(self.show_help_info)
 
         config = load_config()
         is_running = config.get("is_running", False)
@@ -127,14 +210,36 @@ class MainWindow(QMainWindow):
             self.start_backend()
 
         self.check_config_state()
+
+    def open_github(self):
+        webbrowser.open("https://github.com/kirill18734/Ozon_Control")
+
+    def show_help_info(self):
+        QMessageBox.information(
+            self,
+            "О программе",
+            "🔍 Это небольшая утилита для Windows, которая:\n\n"
+            "• Автоматически отслеживает указанную область экрана\n"
+            "• Распознаёт номер (или другой текст) с помощью Tesseract OCR\n"
+            "• Отправляет найденный текст на выбранный принтер\n\n"
+            "Вы можете выбрать принтер, задать координаты области и запустить фоновую проверку.\n\n"
+            "Программа предназначена для автоматизации печати найденных чисел, например, в накладных, чеках и т.д."
+        )
+
     def start_backend(self):
         if not hasattr(self, 'backend_thread') or not self.backend_thread.is_alive():
-            self.backend_thread = threading.Thread(target=main, daemon=True)
-            self.backend_thread.start()
-            print("[INFO] Бэкенд запущен")
+            if load_config()['mode'] == 'neiro':
+                self.backend_thread = threading.Thread(target=main_neiro, daemon=True)
+                self.backend_thread.start()
+                print("[INFO] Бэкенд запущен для нейросети запущен")
+            else:
+                self.backend_thread = threading.Thread(target=main_expansion, daemon=True)
+                self.backend_thread.start()
+                print("[INFO] Бэкенд запущен для расширения запущен")
         else:
             print("[INFO] Бэкенд уже работает")
-        print(self.backend_thread.is_alive())
+
+
     def update_label_dots(self):
         base_text = "Приложение работает"
         dots = "." * (self.dot_animation_step % 4)  # "", ".", "..", "..."
@@ -177,17 +282,19 @@ class MainWindow(QMainWindow):
             self.dot_animation_timer.stop()
 
     def save_change(self, *args):
-
         config = load_config()
-        if len(args) == 1 and args[0] not in ('dark', 'light') and args[0] not in (False, True):
+        if len(args) == 1 and args[0] not in ('dark', 'light') and args[0] not in (False, True) and args[0] not in ('expansion', 'neiro'):
             config["printer"] = args[0]
-        if len(args) == 1 and args[0] in ('dark', 'light') and args[0] not in (False, True):
+        if args[0] in ('dark', 'light'):
             config["theme"] = args[0]
-
             self.apply_theme(args[0])
+        if args[0] in ('expansion', 'neiro'):
+            config["is_running"] = False  # ⛔ остановка текущего режима
+            config["mode"] = args[0]  # 💾 смена режима
+            self.btn_is_running(False)  # 🔘 обновление интерфейса
+
         if len(args) == 1 and args[0] in (False, True):
             config["is_running"] = not config.get("is_running", False)
-            print(config["is_running"] )
             self.btn_is_running(config["is_running"])
             save_config(config)
             if config["is_running"]:
@@ -294,10 +401,14 @@ class MainWindow(QMainWindow):
         if theme == "dark":
             self.setStyleSheet(DARK_STYLE)
             self.ui.btn_change_them.setText("☀️")
+            # Устанавливаем иконку вручную
+            self.ui.btn_github.setIcon(QIcon(Github_icon_white))
+
         else:
             self.setStyleSheet(LIGHT_STYLE)
             self.ui.btn_change_them.setText("🌙")
-
+            # Устанавливаем иконку вручную
+            self.ui.btn_github.setIcon(QIcon(Github_icon_black))
 
 # Основная точка входа — запуск интерфейса и фонового потока
 def run():
@@ -307,4 +418,5 @@ def run():
     sys.exit(app.exec())
 
 
-run()
+if __name__ == "__main__":
+    run()
