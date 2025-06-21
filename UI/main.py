@@ -87,6 +87,7 @@ class MainWindow(QMainWindow):
         # Установка начальных текстов и заголовков
         # Заголовок приложения
         self.setWindowTitle("Печать ячеек")
+        self.setWindowIcon(QtGui.QIcon("icons/title_icon.png"))
         icon_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "icon.png")
         if os.path.exists(icon_path):
             self.setWindowIcon(QtGui.QIcon(icon_path))
