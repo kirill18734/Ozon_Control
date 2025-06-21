@@ -307,4 +307,5 @@ def run():
     sys.exit(app.exec())
 
 
-run()
+if __name__ == "__main__":
+    run()

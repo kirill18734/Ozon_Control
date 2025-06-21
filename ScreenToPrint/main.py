@@ -93,7 +93,10 @@ def main():
                 last_config_check = now
 
             if last_coords:
-                x, y, w, h = last_coords.values()
+                x = last_coords.get("x", 0)
+                y = last_coords.get("y", 0)
+                w = last_coords.get("width", 0)
+                h = last_coords.get("height", 0)
                 screen: QScreen = QGuiApplication.primaryScreen()
                 if screen is None:
                     print("[ERROR] primaryScreen вернул None")
