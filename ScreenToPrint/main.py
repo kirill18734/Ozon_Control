@@ -72,15 +72,16 @@ def main_neiro():
                 screenshot = screen.grabWindow(0, x, y, w, h)
                 screenshot.save(OUTPUT_IMAGE, "png")
                 # находим первое найденный элемент, который соответсвует регулярному выражению и дальше обрабатываем
-                text =  (re.search(pattern, ImageText())).group()
+
+                text = re.search(pattern, ImageText() ).group() if re.search(pattern, ImageText() ) else ''
                 print("Найденный текст:", text, "| Длина:", len(text))
-                if text != last_text:
+                if text != last_text and text:
                     if not first_valid_skipped:
                         print(f"[INFO] Пропущен первый валидный текст: {text}")
                         first_valid_skipped = True
                     else:
-                        print("[INFO] Распечатка текста")
-                        print_text(f"{text.split('-')[0]}.")
+                        print("[INFO] Распечатка текста",text)
+                        # print_text(f"{text.split('-')[0]}.")
                     last_text = text
 
             sleep(INTERVAL)  # или INTERVAL
