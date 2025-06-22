@@ -375,6 +375,19 @@
       <string>Нейросеть</string>
      </property>
     </widget>
+    <widget class="QPushButton" name="btn_update_repo">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>20</y>
+       <width>200</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Доступно обновление</string>
+     </property>
+    </widget>
     <widget class="QCheckBox" name="btn_select_run">
      <property name="geometry">
       <rect>
@@ -404,6 +417,7 @@
     <zorder>btn_github</zorder>
     <zorder>label_expansion</zorder>
     <zorder>label_neiro</zorder>
+    <zorder>btn_update_repo</zorder>
     <zorder>btn_select_run</zorder>
    </widget>
   </widget>

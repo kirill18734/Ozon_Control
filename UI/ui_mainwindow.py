@@ -120,6 +120,10 @@ class Ui_MainWindow(object):
         self.label_neiro = QLabel(self.frame)
         self.label_neiro.setObjectName(u"label_neiro")
         self.label_neiro.setGeometry(QRect(180, 10, 61, 41))
+        self.btn_update_repo = QPushButton(self.frame)
+        self.btn_update_repo.setObjectName(u"btn_update_repo")
+        self.btn_update_repo.setGeometry(QRect(250, 20, 200, 24))
+        self.btn_update_repo.setVisible(False)
         self.btn_select_run = QCheckBox(self.frame)
         self.btn_select_run.setObjectName(u"btn_select_run")
         self.btn_select_run.setGeometry(QRect(110, 20, 41, 20))
@@ -139,6 +143,7 @@ class Ui_MainWindow(object):
         self.btn_github.raise_()
         self.label_expansion.raise_()
         self.label_neiro.raise_()
+        self.btn_update_repo.raise_()
         self.btn_select_run.raise_()
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -171,6 +176,7 @@ class Ui_MainWindow(object):
         self.label_expansion.setText(QCoreApplication.translate("MainWindow", u"\u0420\u0430\u0441\u0448\u0438\u0440\u0435\u043d\u0438\u0435\n"
 "(\u0440\u0435\u043a\u043e\u043c\u0435\u043d\u0434\u0443\u0435\u0442\u0441\u044f)", None))
         self.label_neiro.setText(QCoreApplication.translate("MainWindow", u"\u041d\u0435\u0439\u0440\u043e\u0441\u0435\u0442\u044c", None))
+        self.btn_update_repo.setText(QCoreApplication.translate("MainWindow", u"\u0414\u043e\u0441\u0442\u0443\u043f\u043d\u043e \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435", None))
         self.btn_select_run.setText("")
     # retranslateUi
 
