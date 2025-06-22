@@ -8,6 +8,6 @@
     "height": 45
   },
   "theme": "dark",
-  "is_running": true,
+  "is_running": false,
   "mode": "expansion"
 }

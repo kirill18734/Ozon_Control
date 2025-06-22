@@ -5,20 +5,21 @@ import pytesseract
 import os
 from PySide6.QtGui import QGuiApplication, QScreen
 from config import load_config, OUTPUT_IMAGE, CONFIG_PATH, Tesseract_FILE_PATH, Tesseract_DIR_PATH, \
-    CONFIG_CHECK_INTERVAL, pattern, INTERVAL
+    CONFIG_CHECK_INTERVAL, pattern, INTERVAL, Neiro_lang
 import re
 
 from print_text import print_text
 
 
 def load_area_from_config():
-        config = load_config()
-        area = config.get("area", {})
-        x = area.get("x", 0)
-        y = area.get("y", 0)
-        width = area.get("width", 100)
-        height = area.get("height", 100)
-        return x, y, width, height
+    config = load_config()
+    area = config.get("area", {})
+    x = area.get("x", 0)
+    y = area.get("y", 0)
+    width = area.get("width", 100)
+    height = area.get("height", 100)
+    return x, y, width, height
+
 
 def ImageText():
     pytesseract.pytesseract.tesseract_cmd = Tesseract_FILE_PATH
@@ -29,7 +30,7 @@ def ImageText():
     img = Image.open(OUTPUT_IMAGE)
 
     # Распознай текст
-    text = pytesseract.image_to_string(img)
+    text = pytesseract.image_to_string(img, lang=Neiro_lang)
     return text.replace(' ', '')
 
 
@@ -70,21 +71,17 @@ def main_neiro():
                     break
                 screenshot = screen.grabWindow(0, x, y, w, h)
                 screenshot.save(OUTPUT_IMAGE, "png")
-
-                text = ImageText()
+                # находим первое найденный элемент, который соответсвует регулярному выражению и дальше обрабатываем
+                text =  (re.search(pattern, ImageText())).group()
                 print("Найденный текст:", text, "| Длина:", len(text))
-                # print(text != last_text)
                 if text != last_text:
-                    match = re.search(pattern, text)
-                    if match:
-                        found_number = match.group()
-                        if not first_valid_skipped:
-                            print(f"[INFO] Пропущен первый валидный текст: {found_number}")
-                            first_valid_skipped = True
-                        else:
-                            print("[INFO] Распечатка текста")
-                            print_text(f"{found_number.split('-')[0]}.")
-                        last_text = text
+                    if not first_valid_skipped:
+                        print(f"[INFO] Пропущен первый валидный текст: {text}")
+                        first_valid_skipped = True
+                    else:
+                        print("[INFO] Распечатка текста")
+                        print_text(f"{text.split('-')[0]}.")
+                    last_text = text
 
             sleep(INTERVAL)  # или INTERVAL
 

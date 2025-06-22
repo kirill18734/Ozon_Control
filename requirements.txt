@@ -4,3 +4,5 @@ pillow~=11.2.1
 psutil~=7.0.0
 Flask~=3.1.1
 flask-cors~=6.0.1
+pywin32
+opencv-python
