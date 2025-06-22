@@ -441,12 +441,21 @@ class MainWindow(QMainWindow):
 
     def update_repo(self):
         try:
+            # Сохраняем возможные локальные изменения,
+            # чтобы они не мешали обновлению репозитория
+            subprocess.run(["git", "stash", "--include-untracked"],
+                           stdout=subprocess.DEVNULL,
+                           stderr=subprocess.DEVNULL)
             subprocess.run(["git", "pull"], check=True)
+            subprocess.run(["git", "stash", "pop"],
+                           stdout=subprocess.DEVNULL,
+                           stderr=subprocess.DEVNULL)
             new_ver = self.get_local_commit()
             config = load_config()
             config["version"] = new_ver
             save_config(config)
             self.ui.btn_update_repo.setVisible(False)
+            self.ui.label_title_update.setVisible(False)
         except Exception as e:
             QMessageBox.warning(self, "Ошибка", f"Не удалось обновить репозиторий: {e}")
 
