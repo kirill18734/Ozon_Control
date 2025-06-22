@@ -9,5 +9,6 @@
   },
   "theme": "dark",
   "is_running": false,
-  "mode": "expansion"
+  "mode": "expansion",
+  "version": "edc2f477c1aa396d3178fd4207c6eca65fad9ee6"
 }
