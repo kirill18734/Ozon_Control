@@ -206,6 +206,8 @@ class MainWindow(QMainWindow):
         self.ui.btn_help.clicked.connect(self.show_help_info)
 
         # Кнопка обновления
+        self.ui.label_title_update.setText("Доступно обновление")
+        self.ui.btn_update_repo.setText("Обновить")
         self.ui.btn_update_repo.clicked.connect(self.update_repo)
         self.check_for_updates()
 
@@ -432,8 +434,10 @@ class MainWindow(QMainWindow):
         remote = self.get_remote_commit()
         if remote and remote != local:
             self.ui.btn_update_repo.setVisible(True)
+            self.ui.label_title_update.setVisible(True)
         else:
             self.ui.btn_update_repo.setVisible(False)
+            self.ui.label_title_update.setVisible(False)
 
     def update_repo(self):
         try:

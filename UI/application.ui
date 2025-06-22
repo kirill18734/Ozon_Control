@@ -378,14 +378,19 @@
     <widget class="QPushButton" name="btn_update_repo">
      <property name="geometry">
       <rect>
-       <x>250</x>
+       <x>309</x>
        <y>20</y>
-       <width>200</width>
-       <height>24</height>
+       <width>141</width>
+       <height>31</height>
       </rect>
      </property>
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
      <property name="text">
-      <string>Доступно обновление</string>
+      <string>Обновить</string>
      </property>
     </widget>
     <widget class="QCheckBox" name="btn_select_run">
@@ -401,6 +406,28 @@
       <string/>
      </property>
     </widget>
+    <widget class="QLabel" name="label_title_update">
+     <property name="geometry">
+      <rect>
+       <x>310</x>
+       <y>0</y>
+       <width>141</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>5</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Доступно обновление</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+    <zorder>label_title_update</zorder>
     <zorder>lable_title_printer</zorder>
     <zorder>label_error_show</zorder>
     <zorder>label_title_is_running</zorder>
