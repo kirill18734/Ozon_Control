@@ -228,7 +228,10 @@ def format_number(text):
         text = re.search(pattern, text).group() if re.search(pattern, text) else ''
         # добалвенныое условие
         if text:
+            # 3 павелецкий проезд, д4. (номера до 450 будут в формате: 1234.  Отсальные номера, будут отображатсья полностью: 1234-1234
             return  f"{str(text).split('-')[0]}." if  int(str(text).split('-')[0]) < 450  else text
+            # чонгарский 9 (обычно сохращеные номера: 1234.
+            # return f"{str(text).split('-')[0]}."
     return text
 config_lock = Lock()  # глобальный замок для синхронизации доступа
 
