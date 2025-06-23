@@ -49,7 +49,6 @@ def main_neiro():
                 current_mtime = os.path.getmtime(CONFIG_PATH)
                 if current_mtime != last_config_mtime:
                     config = load_config()
-                    print(config)
                     last_config_mtime = current_mtime
                     last_coords = config.get("area")
                     is_running = config.get("is_running", False)

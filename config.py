@@ -11,8 +11,8 @@ PORT = 4025
 INTERVAL = 0.2  # интервал скриншота
 CONFIG_CHECK_INTERVAL = 0.1  # интервал проверки изменения конфига
 
-Tesseract_DIR_PATH = os.path.join(os.path.dirname(__file__), "Tesseract-OCR/tessdata")
-Tesseract_FILE_PATH = os.path.join(os.path.dirname(__file__), "Tesseract-OCR/tesseract.exe")
+Tesseract_DIR_PATH = r"Tesseract-OCR/tessdata"
+Tesseract_FILE_PATH =r"Tesseract-OCR\tesseract.exe"
 Title_icon = os.path.join(os.path.dirname(__file__), "UI/icons/title_icon.png")
 Github_icon_black =  os.path.join(os.path.dirname(__file__), "UI/icons/github_black.svg")
 Github_icon_white =  os.path.join(os.path.dirname(__file__), "UI/icons/github_white.svg")
@@ -225,12 +225,11 @@ QPushButton#btn_update_repo:hover {
 """
 def format_number(text):
     if pattern:
-        text_result = re.search(pattern, text).group() if re.search(pattern, text) else ''
+        text = re.search(pattern, text).group() if re.search(pattern, text) else ''
         # добалвенныое условие
-        text_result = f"{str(text_result).split('-')[0]}." if  int(str(text_result).split('-')[0]) < 450  else text_result
-    else:
-        text_result = text
-    return text_result
+        if text:
+            return  f"{str(text).split('-')[0]}." if  int(str(text).split('-')[0]) < 450  else text
+    return text
 config_lock = Lock()  # глобальный замок для синхронизации доступа
 
 # Загрузка конфигурации из файла
