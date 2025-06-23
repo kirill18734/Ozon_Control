@@ -7,7 +7,7 @@
     "height": 74
   },
   "theme": "dark",
-  "is_running": true,
-  "mode": "neiro",
+  "is_running": false,
+  "mode": "expansion",
   "version": "e4bc532bcc7e99af02a2f8848d7e7a2b61602220"
 }
