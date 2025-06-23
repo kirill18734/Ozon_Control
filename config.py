@@ -1,6 +1,7 @@
 import os
 import json
 from threading import Lock
+import re
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.json")
 OUTPUT_IMAGE = os.path.join(os.path.dirname(__file__), "screenshot.png")
 Neiro_lang = 'rus'
@@ -222,6 +223,14 @@ QPushButton#btn_update_repo:hover {
     background-color: #4f4f4f;
 }
 """
+def format_number(text):
+    if pattern:
+        text_result = re.search(pattern, text).group() if re.search(pattern, text) else ''
+        # добалвенныое условие
+        text_result = f"{str(text_result).split('-')[0]}." if  int(str(text_result).split('-')[0]) < 450  else text_result
+    else:
+        text_result = text
+    return text_result
 config_lock = Lock()  # глобальный замок для синхронизации доступа
 
 # Загрузка конфигурации из файла

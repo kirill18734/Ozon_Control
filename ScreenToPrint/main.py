@@ -5,8 +5,7 @@ import pytesseract
 import os
 from PySide6.QtGui import QGuiApplication, QScreen
 from config import load_config, OUTPUT_IMAGE, CONFIG_PATH, Tesseract_FILE_PATH, Tesseract_DIR_PATH, \
-    CONFIG_CHECK_INTERVAL, pattern, INTERVAL, Neiro_lang
-import re
+    CONFIG_CHECK_INTERVAL, pattern, INTERVAL, Neiro_lang, format_number
 
 from print_text import print_text
 
@@ -31,7 +30,7 @@ def ImageText():
 
     # Распознай текст
     text = pytesseract.image_to_string(img, lang=Neiro_lang)
-    return text.replace(' ', '')
+    return text
 
 
 def main_neiro():
@@ -72,10 +71,7 @@ def main_neiro():
                 screenshot = screen.grabWindow(0, x, y, w, h)
                 screenshot.save(OUTPUT_IMAGE, "png")
                 # находим первое найденный элемент, который соответсвует регулярному выражению и дальше обрабатываем
-                if pattern:
-                    text = re.search(pattern, ImageText() ).group() if re.search(pattern, ImageText() ) else ''
-                else:
-                    text = ImageText()
+                text  = format_number(ImageText())
                 print("Найденный текст:", text, "| Длина:", len(text))
                 if text != last_text and text:
                     if not first_valid_skipped:
@@ -83,7 +79,7 @@ def main_neiro():
                         first_valid_skipped = True
                     else:
                         print("[INFO] Распечатка текста",text)
-                        print_text(f"{text.split('-')[0]}.")
+                        print_text(text)
                     last_text = text
 
             sleep(INTERVAL)  # или INTERVAL

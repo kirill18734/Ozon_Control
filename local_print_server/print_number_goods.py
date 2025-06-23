@@ -5,7 +5,7 @@ import psutil
 from flask import Flask, request
 from flask_cors import CORS
 
-from config import PORT, CONFIG_PATH, load_config
+from config import PORT, CONFIG_PATH, load_config, format_number
 from print_text import print_text
 
 app = Flask(__name__)
@@ -21,10 +21,9 @@ def print_from_data():
 
         if not text:
             return {'status': 'error', 'message': 'Empty text'}, 400
-
-        clean_text = str(text).split("-")[0].replace(" ", "")
+        clean_text  = format_number(text)
         print(f'Отправил на распечатку: \'{clean_text}.\' ')
-        print_text(f"{clean_text}.")
+        print_text(clean_text)
         return {'status': 'success', 'message': f'Printed: {text}'}
 
     except Exception as e:

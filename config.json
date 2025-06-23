@@ -1,14 +1,13 @@
 {
   "printer": "CHITENG-CT221B",
-  "search_number": "777-777",
   "area": {
-    "x": 759,
-    "y": 340,
-    "width": 73,
-    "height": 59
+    "x": 530,
+    "y": 342,
+    "width": 225,
+    "height": 74
   },
   "theme": "dark",
-  "is_running": false,
-  "mode": "expansion",
-  "version": "c5d865aae31315142d78cd5658aa447df0a8049b"
+  "is_running": true,
+  "mode": "neiro",
+  "version": "e4bc532bcc7e99af02a2f8848d7e7a2b61602220"
 }
