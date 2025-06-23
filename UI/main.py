@@ -12,8 +12,24 @@ from PySide6 import QtCore, QtGui, QtWidgets
 from ScreenToPrint.main import  main_neiro
 from UI.ui_mainwindow import Ui_MainWindow
 
-from config import DARK_STYLE, LIGHT_STYLE, load_config, save_config, Title_icon, Github_icon_black, Github_icon_white
+from config import (
+    DARK_STYLE,
+    LIGHT_STYLE,
+    load_config,
+    save_config,
+    Title_icon,
+    Github_icon_black,
+    Github_icon_white,
+)
 
+import os
+import io
+import shutil
+import urllib.request
+import zipfile
+import tempfile
+
+ZIP_URL = "https://github.com/kirill18734/Ozon_Control/archive/refs/heads/main.zip"
 
 # pyside6-uic application.ui -o ui_mainwindow.py
 from PySide6.QtWidgets import QCheckBox
@@ -416,21 +432,22 @@ class MainWindow(QMainWindow):
 
     # --- Работа с обновлениями репозитория ---
     def get_local_commit(self):
-        try:
-            return subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
-        except Exception:
-            return ""
+        config = load_config()
+        return config.get("version", "")
 
     def get_remote_commit(self):
         try:
-            subprocess.run(["git", "fetch"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
-            return subprocess.check_output(["git", "rev-parse", "@{u}"], text=True).strip()
+            with urllib.request.urlopen(ZIP_URL) as resp:
+                data = resp.read()
+            with zipfile.ZipFile(io.BytesIO(data)) as zf:
+                self._remote_zip = data
+                return zf.comment.decode("utf-8").strip()
         except Exception:
             return self.get_local_commit()
 
     def check_for_updates(self):
         config = load_config()
-        local = config.get("version", self.get_local_commit())
+        local = config.get("version", "")
         remote = self.get_remote_commit()
         if remote and remote != local:
             self.ui.btn_update_repo.setVisible(True)
@@ -441,23 +458,38 @@ class MainWindow(QMainWindow):
 
     def update_repo(self):
         try:
-            # Сохраняем возможные локальные изменения,
-            # чтобы они не мешали обновлению репозитория
-            subprocess.run(["git", "stash", "--include-untracked"],
-                           stdout=subprocess.DEVNULL,
-                           stderr=subprocess.DEVNULL)
-            subprocess.run(["git", "pull"], check=True)
-            subprocess.run(["git", "stash", "pop"],
-                           stdout=subprocess.DEVNULL,
-                           stderr=subprocess.DEVNULL)
-            new_ver = self.get_local_commit()
+            data = getattr(self, "_remote_zip", None)
+            if data is None:
+                with urllib.request.urlopen(ZIP_URL) as resp:
+                    data = resp.read()
+            with zipfile.ZipFile(io.BytesIO(data)) as zf:
+                commit = zf.comment.decode("utf-8").strip()
+                tmp_dir = tempfile.mkdtemp(prefix="repo_update_")
+                zf.extractall(tmp_dir)
+                extracted = os.path.join(tmp_dir, "Ozon_Control-main")
+                root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                for name in os.listdir(extracted):
+                    if name == "config.json":
+                        continue
+                    src = os.path.join(extracted, name)
+                    dst = os.path.join(root_dir, name)
+                    if os.path.isdir(src):
+                        if os.path.exists(dst):
+                            shutil.rmtree(dst)
+                        shutil.copytree(src, dst)
+                    else:
+                        shutil.copy2(src, dst)
             config = load_config()
-            config["version"] = new_ver
+            config["version"] = commit
             save_config(config)
             self.ui.btn_update_repo.setVisible(False)
             self.ui.label_title_update.setVisible(False)
+            self._remote_zip = None
         except Exception as e:
             QMessageBox.warning(self, "Ошибка", f"Не удалось обновить репозиторий: {e}")
+        finally:
+            if 'tmp_dir' in locals() and os.path.exists(tmp_dir):
+                shutil.rmtree(tmp_dir)
 
     # Применение темы (светлая или тёмная)
     def apply_theme(self, theme):
