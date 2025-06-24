@@ -1,10 +1,10 @@
 {
   "printer": "CHITENG-CT221B (Кирилл)",
   "area": {
-    "x": 0,
-    "y": 0,
-    "width": 0,
-    "height": 0
+    "x": 452,
+    "y": 245,
+    "width": 300,
+    "height": 144
   },
   "theme": "dark",
   "is_running": false,
