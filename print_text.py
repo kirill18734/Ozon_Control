@@ -14,7 +14,7 @@ def print_text(text):
             # Создаем шрифт
             font = win32ui.CreateFont({
                 "name": "Arial",
-                "height": 100,  # Размер шрифта
+                "height": 130,  # Размер шрифта
                 "weight": 400,
             })
             printer_dc.SelectObject(font)

@@ -30,6 +30,7 @@ def ImageText():
 
     # Распознай текст
     text = pytesseract.image_to_string(img, lang=Neiro_lang)
+    print(text)
     return text
 
 
