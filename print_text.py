@@ -1,5 +1,19 @@
+import win32print
 import win32ui
 from config import load_config
+
+
+def status_printer():
+    handle = win32print.OpenPrinter(load_config()['printer'])
+    info = win32print.GetPrinter(handle, 2)
+    attrs = info['Attributes']
+
+    # Проверка: принтер в офлайне?
+    PRINTER_ATTRIBUTE_WORK_OFFLINE = 0x00000400
+    is_offline = bool(attrs & PRINTER_ATTRIBUTE_WORK_OFFLINE)
+
+    return is_offline
+
 
 def print_text(text):
     if load_config()["printer"] != '' and text:
