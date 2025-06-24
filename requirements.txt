@@ -5,4 +5,3 @@ psutil
 Flask
 flask-cors
 pywin32
-pyinstaller
