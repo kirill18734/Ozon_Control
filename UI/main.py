@@ -2,6 +2,7 @@ import sys
 import threading
 import webbrowser
 import subprocess
+import shutil
 
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
@@ -419,6 +420,11 @@ class MainWindow(QMainWindow):
         painter.setBrush(QtGui.QColor(0, 255, 0, 50))
         rect = QtCore.QRect(area["x"], area["y"], area["width"], area["height"])
         painter.drawRect(rect)
+        # --- Работа с обновлениями репозитория ---
+
+    def git_available(self):
+        """Check if Git is installed and available in PATH."""
+        return shutil.which("git") is not None
 
     # --- Работа с обновлениями репозитория ---
     def get_local_commit(self):
@@ -446,6 +452,9 @@ class MainWindow(QMainWindow):
             self.ui.label_title_update.setVisible(False)
 
     def update_repo(self):
+        if not self.git_available():
+            QMessageBox.warning(self, "Ошибка", "Git не найден. Установите Git, чтобы обновляться автоматически.")
+            return
         try:
             # Сохраняем возможные локальные изменения,
             # чтобы они не мешали обновлению репозитория
