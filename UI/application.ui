@@ -167,9 +167,9 @@
     <widget class="QLabel" name="label_error_printer">
      <property name="geometry">
       <rect>
-       <x>320</x>
-       <y>60</y>
-       <width>131</width>
+       <x>330</x>
+       <y>70</y>
+       <width>141</width>
        <height>21</height>
       </rect>
      </property>
@@ -427,26 +427,6 @@
       <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QLabel" name="label_error_printer_lable_title_printer_desable">
-     <property name="geometry">
-      <rect>
-       <x>320</x>
-       <y>80</y>
-       <width>131</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">color:red;</string>
-     </property>
-     <property name="text">
-      <string>Принтер отключен</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignCenter</set>
-     </property>
-    </widget>
-    <zorder>label_error_printer_lable_title_printer_desable</zorder>
     <zorder>label_title_update</zorder>
     <zorder>lable_title_printer</zorder>
     <zorder>label_error_show</zorder>

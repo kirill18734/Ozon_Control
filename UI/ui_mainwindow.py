@@ -70,7 +70,7 @@ class Ui_MainWindow(object):
         self.label_error_show.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label_error_printer = QLabel(self.frame)
         self.label_error_printer.setObjectName(u"label_error_printer")
-        self.label_error_printer.setGeometry(QRect(320, 60, 131, 21))
+        self.label_error_printer.setGeometry(QRect(330, 70, 141, 21))
         self.label_error_printer.setStyleSheet(u"color:red;")
         self.label_error_printer.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.btn_show = QPushButton(self.frame)
@@ -136,12 +136,6 @@ class Ui_MainWindow(object):
         font5.setPointSize(5)
         self.label_title_update.setFont(font5)
         self.label_title_update.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.label_error_printer_lable_title_printer_desable = QLabel(self.frame)
-        self.label_error_printer_lable_title_printer_desable.setObjectName(u"label_error_printer_lable_title_printer_desable")
-        self.label_error_printer_lable_title_printer_desable.setGeometry(QRect(320, 80, 131, 21))
-        self.label_error_printer_lable_title_printer_desable.setStyleSheet(u"color:red;")
-        self.label_error_printer_lable_title_printer_desable.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.label_error_printer_lable_title_printer_desable.raise_()
         self.label_title_update.raise_()
         self.lable_title_printer.raise_()
         self.label_error_show.raise_()
@@ -195,6 +189,5 @@ class Ui_MainWindow(object):
         self.btn_update_repo.setText(QCoreApplication.translate("MainWindow", u"\u041e\u0431\u043d\u043e\u0432\u0438\u0442\u044c", None))
         self.btn_select_run.setText("")
         self.label_title_update.setText(QCoreApplication.translate("MainWindow", u"\u0414\u043e\u0441\u0442\u0443\u043f\u043d\u043e \u043e\u0431\u043d\u043e\u0432\u043b\u0435\u043d\u0438\u0435", None))
-        self.label_error_printer_lable_title_printer_desable.setText(QCoreApplication.translate("MainWindow", u"\u041f\u0440\u0438\u043d\u0442\u0435\u0440 \u043e\u0442\u043a\u043b\u044e\u0447\u0435\u043d", None))
     # retranslateUi
 

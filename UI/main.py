@@ -21,6 +21,7 @@ from PySide6.QtCore import QPropertyAnimation, QEasingCurve, Qt, Property
 from PySide6.QtGui import QPainter, QColor, QMouseEvent
 
 from local_print_server.print_number_goods import main_expansion
+from print_text import status_printer
 
 
 class ToggleSwitch(QCheckBox):
@@ -375,8 +376,11 @@ class MainWindow(QMainWindow):
 
         if config.get('printer', '') == '':
             self.ui.label_error_printer.setText("Принтер не указан")
+        elif  status_printer():
+            self.ui.label_error_printer.setText("Принтер отключен")
         else:
             self.ui.label_error_printer.setText("")
+
 
         area = config.get("area", {})
         cooridname = next((key for key in area if area.get(key, 0) != 0), False)

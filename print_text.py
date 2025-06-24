@@ -14,7 +14,6 @@ def status_printer():
 
     return is_offline
 
-
 def print_text(text):
     if load_config()["printer"] != '' and text:
         try:
