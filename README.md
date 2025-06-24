@@ -22,11 +22,24 @@
 - Python 3.10+
 - Windows с настроенным принтером (используется API `win32ui`)
 
-Необходимые зависимости перечислены в `requirements.txt` и устанавливаются командой:
+Необходимые зависимости перечислены в `requirements.txt`.
 
-```bash
-pip install -r requirements.txt
-```
+### Установка Python и зависимостей
+
+1. Загрузите и установите Python 3.10+ с сайта [python.org](https://www.python.org/),
+   отметив опцию *Add Python to PATH*.
+2. В каталоге проекта создайте виртуальное окружение:
+   ```bash
+   python -m venv venv
+   ```
+3. Активируйте его командой:
+   ```bash
+   venv\Scripts\activate
+   ```
+4. Установите зависимости:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ## Запуск
 Для старта интерфейса выполните:
