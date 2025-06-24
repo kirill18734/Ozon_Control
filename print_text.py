@@ -1,6 +1,6 @@
 import win32print
 import win32ui
-from config import load_config
+from config import load_config, FONT
 
 
 def status_printer():
@@ -25,11 +25,7 @@ def print_text(text):
             horz_res = printer_dc.GetDeviceCaps(8)  # HORZRES
             vert_res = printer_dc.GetDeviceCaps(10)  # VERTRES
             # Создаем шрифт
-            font = win32ui.CreateFont({
-                "name": "Arial",
-                "height": 130,  # Размер шрифта
-                "weight": 400,
-            })
+            font = win32ui.CreateFont(FONT)
             printer_dc.SelectObject(font)
 
             # Вычисляем размеры текста

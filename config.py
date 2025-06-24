@@ -10,7 +10,11 @@ pattern = r'\d+-\d+'
 PORT = 4025
 INTERVAL = 0.2  # интервал скриншота
 CONFIG_CHECK_INTERVAL = 0.1  # интервал проверки изменения конфига
-
+FONT = {
+"name": "Arial",
+"height": 130,  # высотка
+"weight": 400,  # ширина
+}
 Tesseract_DIR_PATH = r"Tesseract-OCR/tessdata"
 Tesseract_FILE_PATH =r"Tesseract-OCR\tesseract.exe"
 Title_icon = os.path.join(os.path.dirname(__file__), "UI/icons/title_icon.png")
