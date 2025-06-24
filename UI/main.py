@@ -220,7 +220,9 @@ class MainWindow(QMainWindow):
             self.start_backend()
 
         self.check_config_state()
-
+        self.status_timer = QtCore.QTimer(self)
+        self.status_timer.timeout.connect(self.check_config_state)
+        self.status_timer.start(1000)  # \u0440\u0430\u0437 \u0432 2 \u0441\u0435\u043a\u0443\u043d\u0434\u044b
     def open_github(self):
         webbrowser.open("https://github.com/kirill18734/Ozon_Control")
 
@@ -371,6 +373,9 @@ class MainWindow(QMainWindow):
     def check_config_state(self):
         config = load_config()
 
+        area = config.get("area", {})
+        cooridname = next((key for key in area if area.get(key, 0) != 0), False)
+
         # Активируем или деактивируем кнопки в зависимости от режима
         self.update_area_buttons_state(config.get("mode", "expansion"))
 
@@ -381,9 +386,6 @@ class MainWindow(QMainWindow):
         else:
             self.ui.label_error_printer.setText("")
 
-
-        area = config.get("area", {})
-        cooridname = next((key for key in area if area.get(key, 0) != 0), False)
         if not cooridname:
             self.ui.label_error_show.setText("Область отслеживания не добавлена")
         else:

@@ -107,10 +107,10 @@
     <widget class="QLabel" name="label_title_window">
      <property name="geometry">
       <rect>
-       <x>19</x>
-       <y>145</y>
+       <x>20</x>
+       <y>150</y>
        <width>511</width>
-       <height>41</height>
+       <height>20</height>
       </rect>
      </property>
      <property name="font">
@@ -427,12 +427,11 @@
       <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
+    <zorder>label_title_window</zorder>
     <zorder>label_title_update</zorder>
     <zorder>lable_title_printer</zorder>
-    <zorder>label_error_show</zorder>
     <zorder>label_title_is_running</zorder>
     <zorder>label_text_select_printer</zorder>
-    <zorder>label_title_window</zorder>
     <zorder>btn_change_them</zorder>
     <zorder>label_error_printer</zorder>
     <zorder>btn_show</zorder>
@@ -446,6 +445,7 @@
     <zorder>label_neiro</zorder>
     <zorder>btn_update_repo</zorder>
     <zorder>btn_select_run</zorder>
+    <zorder>label_error_show</zorder>
    </widget>
   </widget>
  </widget>
