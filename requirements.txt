@@ -1,4 +1,4 @@
-kivy
+PySide6
 pytesseract
 pillow
 psutil

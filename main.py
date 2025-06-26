@@ -1,4 +1,4 @@
-from UI.kivy_app import run
+from UI.main import run
 
 if __name__ == "__main__":
     run()
