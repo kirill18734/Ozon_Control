@@ -3,7 +3,7 @@ from time import sleep
 from PIL import Image
 import pytesseract
 import os
-from PIL import ImageGrab
+from PySide6.QtGui import QGuiApplication, QScreen
 from config import load_config, OUTPUT_IMAGE, CONFIG_PATH, Tesseract_FILE_PATH, Tesseract_DIR_PATH, \
     CONFIG_CHECK_INTERVAL, pattern, INTERVAL, Neiro_lang, format_number
 
@@ -64,9 +64,12 @@ def main_neiro():
                 y = last_coords.get("y", 0)
                 w = last_coords.get("width", 0)
                 h = last_coords.get("height", 0)
-                bbox = (x, y, x + w, y + h)
-                screenshot = ImageGrab.grab(bbox)
-                screenshot.save(OUTPUT_IMAGE, "PNG")
+                screen: QScreen = QGuiApplication.primaryScreen()
+                if screen is None:
+                    print("[ERROR] primaryScreen вернул None")
+                    break
+                screenshot = screen.grabWindow(0, x, y, w, h)
+                screenshot.save(OUTPUT_IMAGE, "png")
                 # находим первое найденный элемент, который соответсвует регулярному выражению и дальше обрабатываем
                 text  = format_number(ImageText())
                 print("Найденный текст:", text, "| Длина:", len(text))
