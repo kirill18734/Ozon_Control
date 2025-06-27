@@ -1,10 +1,18 @@
 import win32print
 import win32ui
+import pywintypes
 from config import load_config, FONT
 
 
 def status_printer():
-    handle = win32print.OpenPrinter(load_config()['printer'])
+    """Return True if printer is offline, False if ready,
+    or None if printer name is invalid."""
+    try:
+        handle = win32print.OpenPrinter(load_config()['printer'])
+    except pywintypes.error as e:
+        if e.winerror == 1801:  # printer not found
+            return None
+        raise
     info = win32print.GetPrinter(handle, 2)
     attrs = info['Attributes']
 
