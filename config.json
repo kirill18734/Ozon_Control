@@ -1,0 +1,13 @@
+{
+  "printer": "",
+  "area": {
+    "x": 0,
+    "y": 0,
+    "width": 0,
+    "height": 0
+  },
+  "theme": "dark",
+  "is_running": false,
+  "mode": "neiro",
+  "version": "22e5dfbbd7b2f0df2c7c027f7a78a448ef1053dc"
+}
