@@ -384,10 +384,17 @@ class MainWindow(QMainWindow):
 
         if config.get('printer', '') == '':
             self.ui.label_error_printer.setText("Принтер не указан")
-        elif  status_printer():
-            self.ui.label_error_printer.setText("Принтер отключен")
         else:
-            self.ui.label_error_printer.setText("")
+            status = status_printer()
+            if status is None:
+                config['printer'] = ''
+                save_config(config)
+                self.populate_printer_list()
+                self.ui.label_error_printer.setText("Принтер не найден")
+            elif status:
+                self.ui.label_error_printer.setText("Принтер отключен")
+            else:
+                self.ui.label_error_printer.setText("")
 
         if not cooridname:
             self.ui.label_error_show.setText("Область отслеживания не добавлена")

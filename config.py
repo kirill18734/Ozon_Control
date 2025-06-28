@@ -12,7 +12,8 @@ INTERVAL = 0.2  # интервал скриншота
 CONFIG_CHECK_INTERVAL = 0.1  # интервал проверки изменения конфига
 FONT = {
 "name": "Arial",
-"height": 130,  # высотка
+# "height": 130,  # высотка
+"height": 80,  # высотка
 "weight": 400,  # ширина
 }
 Tesseract_DIR_PATH = r"Tesseract-OCR/tessdata"
@@ -234,9 +235,9 @@ def format_number(text):
         if text:
             print(text)
             # 3 павелецкий проезд, д4. (номера до 450 будут в формате: 1234.  Отсальные номера, будут отображатсья полностью: 1234-1234
-            # return  f"{str(text).split('-')[0]}." if  int(str(text).split('-')[0]) < 450  else text
+            return  f"{str(text).split('-')[0]}." if  int(str(text).split('-')[0]) < 450  else text
             # чонгарский 9 (обычно сохращеные номера: 1234.
-            return f"{str(text).split('-')[0]}."
+            # return f"{str(text).split('-')[0]}."
     return text
 config_lock = Lock()  # глобальный замок для синхронизации доступа
 
