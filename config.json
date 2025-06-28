@@ -1,13 +1,13 @@
 {
-  "printer": "CHITENG-CT221B (Кирилл)",
+  "printer": "CHITENG-CT221B (Любовь Михайловна)",
   "area": {
     "x": 550,
-    "y": 258,
-    "width": 705,
-    "height": 117
+    "y": 284,
+    "width": 410,
+    "height": 125
   },
   "theme": "dark",
-  "is_running": false,
-  "mode": "neiro",
-  "version": "22e5dfbbd7b2f0df2c7c027f7a78a448ef1053dc"
+  "is_running": true,
+  "mode": "expansion",
+  "version": "b510cb2e379a49e57339d09a468547f65a020412"
 }
