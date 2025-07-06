@@ -4,7 +4,27 @@
 
   const commandToRun = '82634791520368417952631';
 
-  // Функция имитации нажатия клавиши
+  // Перевод русских букв в английскую раскладку (только буквы)
+  function convertCyrillicToLatin(input) {
+    const layout = {
+      'а': 'f', 'б': ',', 'в': 'd', 'г': 'u', 'д': 'l',
+      'е': 't', 'ё': '`', 'ж': ';', 'з': 'p', 'и': 'b',
+      'й': 'q', 'к': 'r', 'л': 'k', 'м': 'v', 'н': 'y',
+      'о': 'j', 'п': 'g', 'р': 'h', 'с': 'c', 'т': 'n',
+      'у': 'e', 'ф': 'a', 'х': '[', 'ц': 'w', 'ч': 'x',
+      'ш': 'i', 'щ': 'o', 'ъ': ']', 'ы': 's', 'ь': 'm',
+      'э': '\'', 'ю': '.', 'я': 'z',
+    };
+
+    return input.replace(/[а-яё]/gi, char => {
+      const lower = char.toLowerCase();
+      const isUpper = char !== lower;
+      const latin = layout[lower] || char;
+      return isUpper ? latin.toUpperCase() : latin;
+    });
+  }
+
+  // Имитация нажатия клавиши
   function simulateKeyPress(element, key, keyCode) {
     const event = new KeyboardEvent('keydown', {
       key: key,
@@ -16,7 +36,7 @@
     element.dispatchEvent(event);
   }
 
-  // Функция выбора из дропдауна в контексте переданного trElement
+  // Выбор пункта в выпадающем списке
   async function selectDropdownOption(trElement) {
     const wrapper = trElement.querySelector('._returnGroupReasonSelectWrapper_1v3qc_3');
     if (!wrapper) {
@@ -30,7 +50,6 @@
       return;
     }
 
-    // Клик по инпуту
     const rect = input.getBoundingClientRect();
     const clickEvent = new MouseEvent('click', {
       bubbles: true,
@@ -44,17 +63,14 @@
     input.dispatchEvent(clickEvent);
     console.log('Клик по инпуту выполнен');
 
-    // Ждем открытия списка
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    // Нажимаем стрелку вниз 4 раза, чтобы выбрать нужный пункт
     for (let i = 0; i < 4; i++) {
       simulateKeyPress(input, 'ArrowDown', 40);
       await new Promise(resolve => setTimeout(resolve, 100));
       console.log(`Нажатие стрелки вниз ${i + 1}/4`);
     }
 
-    // Нажимаем Enter для выбора
     await new Promise(resolve => setTimeout(resolve, 100));
     simulateKeyPress(input, 'Enter', 13);
     console.log('Нажат Enter - выбор подтвержден');
@@ -63,19 +79,29 @@
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
       const trimmed = buffer.trim();
+      const converted = convertCyrillicToLatin(trimmed);
+      console.log(`Преобразовано: "${trimmed}" → "${converted}"`);
 
-      if (trimmed === commandToRun) {
+      if (converted === commandToRun) {
         if (!window.lastMatchedInput) {
           console.log('Нет сохранённого числа для поиска.');
           buffer = '';
           return;
         }
 
-        const selector = `tr[data-testid="posting-${window.lastMatchedInput}"]`;
-        const trElement = document.querySelector(selector);
+        // Поиск tr по текстовому содержимому
+        const allTrs = document.querySelectorAll('tr[data-testid^="posting-"]');
+        let trElement = null;
+
+        for (const tr of allTrs) {
+          if (tr.textContent.includes(window.lastMatchedInput)) {
+            trElement = tr;
+            break;
+          }
+        }
 
         if (!trElement) {
-          console.log(`Элемент с data-testid="posting-${window.lastMatchedInput}" не найден.`);
+          console.log(`Не найден tr, содержащий номер: ${window.lastMatchedInput}`);
           buffer = '';
           return;
         }
@@ -99,13 +125,11 @@
         checkButton.click();
 
         setTimeout(async () => {
-          // Клик по чекбоксу
           const checkbox = trElement.querySelector('input[type="checkbox"]');
           if (checkbox) {
             checkbox.click();
             console.log('Чекбокс кликнут.');
 
-            // Через 700 мс запускаем выбор из дропдауна
             setTimeout(() => {
               selectDropdownOption(trElement)
                 .catch(err => console.error('Ошибка в selectDropdownOption:', err));
@@ -120,21 +144,20 @@
         return;
       }
 
-      if (trimmed.length > 20) {
-        console.log('Ввод слишком длинный (больше 20 символов):', trimmed);
-      } else if (/^\d+(\s*\d+)*$/.test(trimmed)) {
-        console.log('Введены числа:', trimmed);
-        window.lastMatchedInput = trimmed;
-      } else if (/^%\d+%\d+$/.test(trimmed)) {
-        console.log('Введена строка в формате %число%число:', trimmed);
-        window.lastMatchedInput = trimmed;
-		
-      }else if (/^ii\d+$/.test(trimmed)) {
-	    console.log('Введён номер формата ii+числа:', trimmed);
-	    window.lastMatchedInput = trimmed;
-	  }
-	  else {
-        console.log('Невалидный ввод:', trimmed);
+      // Сохранение последнего найденного значения
+      if (converted.length > 20) {
+        console.log('Ввод слишком длинный (больше 20 символов):', converted);
+      } else if (/^\d+(\s*\d+)*$/.test(converted)) {
+        console.log('Введены числа:', converted);
+        window.lastMatchedInput = converted;
+      } else if (/^%\d+%\d+$/.test(converted)) {
+        console.log('Введена строка в формате %число%число:', converted);
+        window.lastMatchedInput = converted;
+      } else if (/^ii\d+$/.test(converted)) {
+        console.log('Введён номер формата ii+числа:', converted);
+        window.lastMatchedInput = converted;
+      } else {
+        console.log('Невалидный ввод:', converted);
       }
 
       buffer = '';
