@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Page Modifier Returns",
+  "version": "1.0.0",
+  "description": "Указывает возвраты",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["logger2.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": [],
+  "host_permissions": ["<all_urls>"]
+}
