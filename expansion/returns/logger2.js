@@ -4,7 +4,6 @@
 
   const commandToRun = '82634791520368417952631';
 
-  // Перевод русских букв в английскую раскладку (только буквы)
   function convertCyrillicToLatin(input) {
     const layout = {
       'а': 'f', 'б': ',', 'в': 'd', 'г': 'u', 'д': 'l',
@@ -24,7 +23,6 @@
     });
   }
 
-  // Имитация нажатия клавиши
   function simulateKeyPress(element, key, keyCode) {
     const event = new KeyboardEvent('keydown', {
       key: key,
@@ -36,7 +34,6 @@
     element.dispatchEvent(event);
   }
 
-  // Выбор пункта в выпадающем списке
   async function selectDropdownOption(trElement) {
     const wrapper = trElement.querySelector('._returnGroupReasonSelectWrapper_1v3qc_3');
     if (!wrapper) {
@@ -74,6 +71,19 @@
     await new Promise(resolve => setTimeout(resolve, 100));
     simulateKeyPress(input, 'Enter', 13);
     console.log('Нажат Enter - выбор подтвержден');
+
+    // <<< Финальный клик по нужному div >>>
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+	const focusableElements = document.querySelectorAll('input, button, select, textarea, a[href], [tabindex]:not([tabindex="-1"])');
+	const currentIndex = Array.from(focusableElements).indexOf(document.activeElement);
+	const next = focusableElements[currentIndex + 1];
+
+	if (next) {
+		next.focus();
+		console.log('Нажат Tab - выбор подтвержден');
+	}
+
   }
 
   document.addEventListener('keydown', function (e) {
@@ -89,14 +99,27 @@
           return;
         }
 
-        // Поиск tr по текстовому содержимому
         const allTrs = document.querySelectorAll('tr[data-testid^="posting-"]');
         let trElement = null;
 
+        // 1. Поиск по data-testid
         for (const tr of allTrs) {
-          if (tr.textContent.includes(window.lastMatchedInput)) {
+          const testId = tr.getAttribute('data-testid');
+          if (testId === `posting-${window.lastMatchedInput}`) {
             trElement = tr;
+            console.log('Найден tr по data-testid:', testId);
             break;
+          }
+        }
+
+        // 2. Если не нашли — fallback по тексту
+        if (!trElement) {
+          for (const tr of allTrs) {
+            if (tr.textContent.includes(window.lastMatchedInput)) {
+              trElement = tr;
+              console.log('Найден tr по textContent');
+              break;
+            }
           }
         }
 
@@ -106,7 +129,6 @@
           return;
         }
 
-        // Кнопка "Проверка"
         const buttons = trElement.querySelectorAll('button');
         let checkButton = null;
         for (const btn of buttons) {
@@ -144,7 +166,7 @@
         return;
       }
 
-      // Сохранение последнего найденного значения
+      // Сохраняем введённый номер, если он валиден
       if (converted.length > 20) {
         console.log('Ввод слишком длинный (больше 20 символов):', converted);
       } else if (/^\d+(\s*\d+)*$/.test(converted)) {
