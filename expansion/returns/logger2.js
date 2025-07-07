@@ -34,56 +34,70 @@
     element.dispatchEvent(event);
   }
 
-  async function selectDropdownOption(trElement) {
-    const wrapper = trElement.querySelector('._returnGroupReasonSelectWrapper_1v3qc_3');
-    if (!wrapper) {
-      console.error('Контейнер _returnGroupReasonSelectWrapper_1v3qc_3 не найден внутри tr.');
-      return;
-    }
+  function waitAndGet(selectorOrCallback, timeout = 3000, interval = 100) {
+    return new Promise((resolve, reject) => {
+      const isMatch = typeof selectorOrCallback === 'function'
+        ? selectorOrCallback
+        : () => document.querySelector(selectorOrCallback);
 
-    const input = wrapper.querySelector('input.ozi__input__input__-VL68');
-    if (!input) {
-      console.error('Инпут внутри контейнера не найден.');
-      return;
-    }
+      const timer = setInterval(() => {
+        const result = isMatch();
+        if (result) {
+          clearInterval(timer);
+          clearTimeout(failTimer);
+          resolve(result);
+        }
+      }, interval);
 
-    const rect = input.getBoundingClientRect();
-    const clickEvent = new MouseEvent('click', {
-      bubbles: true,
-      cancelable: true,
-      view: window,
-      clientX: rect.x + 5,
-      clientY: rect.y + 5
+      const failTimer = setTimeout(() => {
+        clearInterval(timer);
+        reject(new Error(`Element not found within ${timeout}ms`));
+      }, timeout);
     });
+  }
 
-    input.focus();
-    input.dispatchEvent(clickEvent);
-    console.log('Клик по инпуту выполнен');
+  async function selectDropdownOption(trElement) {
+    try {
+      const wrapper = await waitAndGet(() =>
+        trElement.querySelector('._returnGroupReasonSelectWrapper_1v3qc_3'));
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+      const input = await waitAndGet(() =>
+        wrapper.querySelector('input.ozi__input__input__-VL68'));
 
-    for (let i = 0; i < 4; i++) {
-      simulateKeyPress(input, 'ArrowDown', 40);
-      await new Promise(resolve => setTimeout(resolve, 100));
-      console.log(`Нажатие стрелки вниз ${i + 1}/4`);
+      const rect = input.getBoundingClientRect();
+      const clickEvent = new MouseEvent('click', {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+        clientX: rect.x + 5,
+        clientY: rect.y + 5
+      });
+
+      input.focus();
+      input.dispatchEvent(clickEvent);
+      console.log('Клик по инпуту выполнен');
+
+      for (let i = 0; i < 4; i++) {
+        simulateKeyPress(input, 'ArrowDown', 40);
+        await new Promise(resolve => setTimeout(resolve, 100));
+        console.log(`Нажатие стрелки вниз ${i + 1}/4`);
+      }
+
+      simulateKeyPress(input, 'Enter', 13);
+      console.log('Нажат Enter - выбор подтвержден');
+
+      const next = await waitAndGet(() => {
+        const focusables = document.querySelectorAll('input, button, select, textarea, a[href], [tabindex]:not([tabindex="-1"])');
+        const index = Array.from(focusables).indexOf(document.activeElement);
+        return focusables[index + 1];
+      });
+
+      next.focus();
+      console.log('Нажат Tab - выбор подтвержден');
+
+    } catch (err) {
+      console.error('Ошибка в selectDropdownOption:', err.message);
     }
-
-    await new Promise(resolve => setTimeout(resolve, 100));
-    simulateKeyPress(input, 'Enter', 13);
-    console.log('Нажат Enter - выбор подтвержден');
-
-    // <<< Финальный клик по нужному div >>>
-    await new Promise(resolve => setTimeout(resolve, 300));
-
-	const focusableElements = document.querySelectorAll('input, button, select, textarea, a[href], [tabindex]:not([tabindex="-1"])');
-	const currentIndex = Array.from(focusableElements).indexOf(document.activeElement);
-	const next = focusableElements[currentIndex + 1];
-
-	if (next) {
-		next.focus();
-		console.log('Нажат Tab - выбор подтвержден');
-	}
-
   }
 
   document.addEventListener('keydown', function (e) {
@@ -102,7 +116,6 @@
         const allTrs = document.querySelectorAll('tr[data-testid^="posting-"]');
         let trElement = null;
 
-        // 1. Поиск по data-testid
         for (const tr of allTrs) {
           const testId = tr.getAttribute('data-testid');
           if (testId === `posting-${window.lastMatchedInput}`) {
@@ -112,7 +125,6 @@
           }
         }
 
-        // 2. Если не нашли — fallback по тексту
         if (!trElement) {
           for (const tr of allTrs) {
             if (tr.textContent.includes(window.lastMatchedInput)) {
@@ -152,10 +164,15 @@
             checkbox.click();
             console.log('Чекбокс кликнут.');
 
-            setTimeout(() => {
-              selectDropdownOption(trElement)
-                .catch(err => console.error('Ошибка в selectDropdownOption:', err));
-            }, 700);
+            try {
+              await waitAndGet(() =>
+                trElement.querySelector('._returnGroupReasonSelectWrapper_1v3qc_3 input.ozi__input__input__-VL68'), 3000);
+
+              await selectDropdownOption(trElement);
+            } catch (err) {
+              console.error('Не найден input для selectDropdownOption:', err.message);
+              return;
+            }
 
           } else {
             console.log('Чекбокс не найден внутри выбранного элемента.');
@@ -166,7 +183,7 @@
         return;
       }
 
-      // Сохраняем введённый номер, если он валиден
+      // Сохраняем введённый номер
       if (converted.length > 20) {
         console.log('Ввод слишком длинный (больше 20 символов):', converted);
       } else if (/^\d+(\s*\d+)*$/.test(converted)) {
