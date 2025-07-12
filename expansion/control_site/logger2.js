@@ -141,5 +141,13 @@ document.addEventListener("keydown", async function (e) {
                 "text:На главную"
             ]);
         }
+		if (buffer.includes("70983625147892016354712")) {
+            buffer = "";
+            await startToIssueLoopGeneric([
+                "text:Продолжить",
+                "text:Не выдавать пакеты",
+                "text:Оплатить"
+            ]);
+        }
     }
 });

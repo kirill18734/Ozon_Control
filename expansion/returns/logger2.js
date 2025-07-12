@@ -76,11 +76,11 @@
       input.focus();
       input.dispatchEvent(clickEvent);
       console.log('Клик по инпуту выполнен');
-
-      for (let i = 0; i < 4; i++) {
-        simulateKeyPress(input, 'ArrowDown', 40);
+	  await new Promise(resolve => setTimeout(resolve, 300));
+      for (let i = 0; i < 2; i++) {
+        simulateKeyPress(input, 'ArrowUp', 38);
         await new Promise(resolve => setTimeout(resolve, 100));
-        console.log(`Нажатие стрелки вниз ${i + 1}/4`);
+        console.log(`Нажатие стрелки вверх ${i + 1}/2`);
       }
 
       simulateKeyPress(input, 'Enter', 13);
