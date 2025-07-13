@@ -429,59 +429,6 @@ class MainWindow(QMainWindow):
         painter.setBrush(QtGui.QColor(0, 255, 0, 50))
         rect = QtCore.QRect(area["x"], area["y"], area["width"], area["height"])
         painter.drawRect(rect)
-        # --- Работа с обновлениями репозитория ---
-
-    def git_available(self):
-        """Check if Git is installed and available in PATH."""
-        return shutil.which("git") is not None
-
-    # --- Работа с обновлениями репозитория ---
-    def get_local_commit(self):
-        try:
-            return subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
-        except Exception:
-            return ""
-
-    def get_remote_commit(self):
-        try:
-            subprocess.run(["git", "fetch"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
-            return subprocess.check_output(["git", "rev-parse", "@{u}"], text=True).strip()
-        except Exception:
-            return self.get_local_commit()
-
-    def check_for_updates(self):
-        config = load_config()
-        local = config.get("version", self.get_local_commit())
-        remote = self.get_remote_commit()
-        if remote and remote != local:
-            self.ui.btn_update_repo.setVisible(True)
-            self.ui.label_title_update.setVisible(True)
-        else:
-            self.ui.btn_update_repo.setVisible(False)
-            self.ui.label_title_update.setVisible(False)
-
-    def update_repo(self):
-        if not self.git_available():
-            QMessageBox.warning(self, "Ошибка", "Git не найден. Установите Git, чтобы обновляться автоматически.")
-            return
-        try:
-            # Сохраняем возможные локальные изменения,
-            # чтобы они не мешали обновлению репозитория
-            subprocess.run(["git", "stash", "--include-untracked"],
-                           stdout=subprocess.DEVNULL,
-                           stderr=subprocess.DEVNULL)
-            subprocess.run(["git", "pull"], check=True)
-            subprocess.run(["git", "stash", "pop"],
-                           stdout=subprocess.DEVNULL,
-                           stderr=subprocess.DEVNULL)
-            new_ver = self.get_local_commit()
-            config = load_config()
-            config["version"] = new_ver
-            save_config(config)
-            self.ui.btn_update_repo.setVisible(False)
-            self.ui.label_title_update.setVisible(False)
-        except Exception as e:
-            QMessageBox.warning(self, "Ошибка", f"Не удалось обновить репозиторий: {e}")
 
     # Применение темы (светлая или тёмная)
     def apply_theme(self, theme):
