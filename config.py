@@ -120,7 +120,7 @@ QPushButton#btn_help {
 QPushButton#btn_help:hover{
     border: 1px solid white;
 }
-/* Кнопки */
+/* Кнопки 
 QPushButton#btn_update_repo  {
     background-color: orange;
     color: white;
@@ -131,6 +131,7 @@ QPushButton#btn_update_repo  {
 QPushButton#btn_update_repo:hover {
     background-color: #3A6FCC;
 }
+*/
 """
 
 DARK_STYLE = """
@@ -219,7 +220,7 @@ QPushButton#btn_help {
 QPushButton#btn_help:hover{
     border: 1px solid  #2b2d30;;
 }
-/* Кнопки */
+/* Кнопки
 QPushButton#btn_update_repo{
     background-color: orange;
     color: white;
@@ -229,7 +230,7 @@ QPushButton#btn_update_repo{
 
 QPushButton#btn_update_repo:hover {
     background-color: #4f4f4f;
-}
+}*/
 """
 def format_number(text):
     if pattern:

@@ -207,11 +207,11 @@ class MainWindow(QMainWindow):
         # Подключаем событие нажатия
         self.ui.btn_help.clicked.connect(self.show_help_info)
 
-        # Кнопка обновления
-        self.ui.label_title_update.setText("Доступно обновление")
-        self.ui.btn_update_repo.setText("Обновить")
-        self.ui.btn_update_repo.clicked.connect(self.update_repo)
-        self.check_for_updates()
+        # # Кнопка обновления
+        # self.ui.label_title_update.setText("Доступно обновление")
+        # self.ui.btn_update_repo.setText("Обновить")
+        # self.ui.btn_update_repo.clicked.connect(self.update_repo)
+        # self.check_for_updates()
 
         config = load_config()
         is_running = config.get("is_running", False)
