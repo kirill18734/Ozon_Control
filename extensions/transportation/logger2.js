@@ -1,12 +1,17 @@
 (function () {
-  const targetText = "Угги";
+  const keywords = ["Угги", "ii9082036526", "Возврат-2"]; // все слова должны присутствовать
   const classPrefix = "_element";
+
+  function containsAllKeywords(text) {
+    return keywords.every(keyword => text.includes(keyword));
+  }
 
   function removeTargetDivs() {
     document.querySelectorAll(`div[class^="${classPrefix}"]`).forEach(div => {
-      if (div.textContent.includes(targetText)) {
+      const text = div.textContent;
+      if (containsAllKeywords(text)) {
         div.remove();
-        console.log("Удалён элемент с текстом 'Угги':", div);
+        console.log("Удалён элемент, содержащий все ключевые слова:", div);
       }
     });
   }
