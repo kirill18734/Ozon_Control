@@ -3,8 +3,8 @@ import json
 from threading import Lock
 import re
 addres = {
-    "Чонграский, 9": True,
-    "3, Павелецкий проезд, 4":False
+    "Чонграский, 9": False,
+    "3, Павелецкий проезд, 4":True
 }
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), "config.json")
 OUTPUT_IMAGE = os.path.join(os.path.dirname(__file__), "screenshot.png")
@@ -16,7 +16,7 @@ INTERVAL = 0.2  # интервал скриншота
 CONFIG_CHECK_INTERVAL = 0.1  # интервал проверки изменения конфига
 FONT = {
 "name": "Arial",
-"height": 130 if addres["Чонграский, 9"] else  80,
+"height": 130 ,# if addres["Чонграский, 9"] else  80,
 "weight": 400,  # ширина
 }
 Tesseract_DIR_PATH = r"Tesseract-OCR/tessdata"
