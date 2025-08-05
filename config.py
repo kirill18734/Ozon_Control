@@ -214,7 +214,7 @@ def format_number(text):
         text = re.search(pattern, text).group() if re.search(pattern, text) else ''
         # добалвенныое условие
         if text:
-            return f"{str(text).split('-')[0]}." if addres["Чонграский, 9"] else   f"{str(text).split('-')[0]}." if  int(str(text).split('-')[0]) < 450  else text
+            return f"{str(text).split('-')[0]}." if addres["Чонграский, 9"] else   f"{str(text).split('-')[0]}." if  int(str(text).split('-')[0]) < 450  else f"{text}."
     return text
 config_lock = Lock()  # глобальный замок для синхронизации доступа
 

@@ -1,7 +1,9 @@
+from copy import copy
+
 import win32print
 import win32ui
 import pywintypes
-from config import load_config, FONT as f, addres
+from config import load_config, FONT as f , addres
 
 
 def status_printer():
@@ -32,13 +34,12 @@ def print_text(text):
             # Получаем размер printable area
             horz_res = printer_dc.GetDeviceCaps(8)  # HORZRES
             vert_res = printer_dc.GetDeviceCaps(10)  # VERTRES
+            print(f"Полученный текст: '{text}'")
+            FONT = copy(f)
             # Создаем шрифт
-            FONT = None
-            if addres["Чонграский, 9"] or int(str(text).replace('.', '').split('-')[0]) < 450 :
-                FONT = f
-            else:
-                f['height'] = 80
-                FONT = f
+            if not (addres["Чонграский, 9"]) and not(int(str(text).replace('.', '').split('-')[0]) < 450 ):
+                FONT['height'] = 75
+                FONT['weight'] = 500
             font = win32ui.CreateFont(FONT)
             printer_dc.SelectObject(font)
 
