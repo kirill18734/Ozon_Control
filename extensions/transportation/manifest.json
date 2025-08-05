@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "Delete_order_transportation",
+  "version": "1.0.0",
+  "description": "Удаляет возвраты из перевозки",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["logger2.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": [],
+  "host_permissions": ["<all_urls>"]
+}
